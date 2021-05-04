@@ -36,23 +36,16 @@ public class LoginServlet extends HttpServlet {
 		RequestDispatcher dispatcher;
 
 		if(loginUser.getUserName() == null) {
+			System.out.println("ログイン失敗");
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginFailure.jsp");
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
 
-			if(loginUser.getUserName().equals("admin") && loginUser.getPass().equals("adminpassword")) {
-				System.out.println("管理者としてログイン");
-				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin.jsp");
-			} else {
-				System.out.println("一般ユーザーとしてログイン");
-				System.out.println("▼▼「商品リスト」ページ");
-
-				//■商品リスト画面にフォワード
-				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
-
-			}
 	}
+
+		//■ShoppingServletにフォワード
+		dispatcher = request.getRequestDispatcher("/ShoppingServlet");
 		System.out.println(loginUser.getUserName());
 
 		dispatcher.forward(request, response);
@@ -64,8 +57,12 @@ public class LoginServlet extends HttpServlet {
 
 		String action = request.getParameter("action");
         if (action.equals("logout")) {
-            // クリックされたボタンが「logout」の場合はログアウト処理（セッションの破棄）を実施
-
+            // 「ログアウト」ボタンが押された場合はログアウト処理（セッションの破棄）
+        	HttpSession session = request.getSession();
+        	session.invalidate();
+        	System.out.println("ログアウト");
+        	System.out.println("セッションの破棄（全インスタンスが消滅）");
+//			request.setAttribute("errorMsg", "ログアウトしました"); //リダイレクトではリクエストスコープの引継ぎ不可
 
             response.sendRedirect("./");
         }

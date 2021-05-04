@@ -20,13 +20,4 @@
 </form>
 <a href="/shopping/RegisterServlet">アカウント登録</a>
 
-<%--
-<h2>登録完了。ようこそ！{ユーザー名}さん</h2><%--ダミー%>
-
-
-<h2>ようこそ！<c:out value="${userName}"/>さん</h2>
-<% if(request.getAttribute("isNewUser") != null) { %>
-<% } %>
---%>
-
 </html>

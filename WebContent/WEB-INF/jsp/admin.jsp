@@ -1,16 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>管理者画面</title>
 </head>
-
+<jsp:include page="/WEB-INF/jsp/header.jsp" />
 <body>
-	<p>「管理者さん」
-	<a href="LoginServlet?action=logout">ログアウト</a> <%-- 要修正 --%>
-	</p>
 <h1>管理者画面</h1>
 
 <form method="POST" action="" id="search">
@@ -46,59 +45,21 @@
 <br>
 
 <table>
-    <tr></tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
 
-    <tr><td colspan="3"><img src="img/wat0001.jpg" width="200" height="200"></td></tr>
+<tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
+<c:forEach var="item" items="${itemList}" >
+	<tr><td colspan="3"><img src="img/${item.item_id}.jpg" width="200" height="200"></td></tr>
     <tr>
         <form>
-            <td>wat0001</td>
-            <td>シンプルアナログ時計</td>
-            <td><span>¥</span>90000</td>
-            <td>3</td>
-            <td><button type="submit">変更する</button></td>
+        <td>${item.item_id}</td>
+        <td>${item.name}</td>
+        <td><span>¥</span>${item.price}</td>
+	    <td>${item.quantity}<td>
+	    <button type="submit">変更する</button></td>
         </form>
     </tr>
+</c:forEach>
+</table>
 
-    <tr><td colspan="3"><img src="img/tie0001.jpg" width="200" height="200"></td></tr>
-     <tr>
-        <form>
-            <td>tie0001</td>
-            <td>ストライプネクタイ</td>
-            <td><span>¥</span>3000</td>
-            <td>2</td>
-            <td><button type="submit">変更する</button></td>
-        </form>
-    </tr>
-
-    <tr><td colspan="3"><img src="img/wal0001.jpg" width="200" height="200"></td></tr>
-    <tr>
-        <form>
-            <td>wal0001</td>
-            <td>ブラウン長財布</td>
-            <td><span>¥</span>20000</td>
-            <td>5</td>
-            <td><button type="submit">変更する</button></td>
-        </form>
-    </tr>
-    </table>
-
-    <script src="js/nav.js"></script>
-
-    <script>
-        document.getElementById("edit").onclick = function() {
-            var result = window.confirm('変更を確定します。よろしいですか？');
-
-            if( result ) {
-
-                //「true」の処理
-
-            }
-            else {
-
-                //「false」の処理
-
-            }
-        }
-        </script>
 </body>
 </html>

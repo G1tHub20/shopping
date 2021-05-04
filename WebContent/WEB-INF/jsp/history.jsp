@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -12,20 +14,19 @@
 <h1>注文履歴</h1>
 <table>
     <tr><th>注文日</th><th>商品名</th><th>金額</th><th>数量</th></tr>
+    <c:forEach var="history" items="${historyList}" >
     <tr>
-        <td>2020/11/28</td>
-        <td>シンプルアナログ時計</td>
-        <td><span>¥</span>90,000</td>
-        <td>1</td>
+        <td>${history.purchaseDate}</td>
+        <td>${history.name}</td>
+        <td><span>¥</span>${history.price}</td>
+        <td>${history.purchaseNum}</td>
     </tr>
-    <tr>
-        <td>2020/11/28</td>
-        <td>ワンカラーネクタイ</td>
-        <td><span>¥</span>20,000</td>
-        <td>1</td>
-    </tr>
+    </c:forEach>
 </table>
-<p><span>合計金額：¥</span>110,000</p></tr>
+<c:forEach var="history" items="${historyList}" >
+${history.price += history.price} </c:forEach>
+
+<p><span>合計金額：¥</span>110,000（仮）</p></tr>
 <a href="ShoppingServlet?action=itemList">商品リストに戻る</a>
 
 <script src="js/nav.js"></script>

@@ -11,8 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.GetHistoryLogic;
 import model.GetItemListLogic;
+import model.HistoryBean;
 import model.ItemBean;
+import model.SearchItemLogic;
+import model.UserBean;
 
 @WebServlet("/ShoppingServlet")
 public class ShoppingServlet extends HttpServlet {
@@ -21,37 +25,88 @@ public class ShoppingServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
+		RequestDispatcher dispatcher = null;
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
-		if (action != null) {
+		// ■注文履歴
+		System.out.println("jspからShoppingServletに遷移");
+		if (action != null && action.equals("history")) {
+			System.out.println("action='" + action + "'");
 
-			if (action.equals("history")) {
-				System.out.println("action='" + action + "'");
-				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
+			HttpSession session = request.getSession();
+			UserBean loginUser = (UserBean)session.getAttribute("loginUser");
 
-			} else if (action.equals("itemList")) {
-//			} else {
+			// 商品一覧を取得
+			GetHistoryLogic getHistoryLogic = new GetHistoryLogic();
+			List<HistoryBean> historyList = getHistoryLogic.execute(loginUser);
 
-				System.out.println("action='" + action + "'");
+			session.setAttribute("historyList", historyList);
 
-				// 商品一覧を取得
-				GetItemListLogic getItemListLogic = new GetItemListLogic();
-				List<ItemBean> itemList = getItemListLogic.execute();
+			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
 
-				System.out.println(itemList);
-
-				HttpSession session = request.getSession();
-				session.setAttribute("itemList", itemList);
-
-				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
-			}
+		} else if (action != null && action.equals("itemList")) {
+			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
 		}
 		dispatcher.forward(request, response);
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String action = request.getParameter("action");
+		if (action != null && action.equals("search")) {
+        // 「検索」ボタンが押された場合は検索処理（商品絞り込み）
+
+		//■リクエストパラメータの取得
+		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
+		String category = request.getParameter("category");
+		String itemName = request.getParameter("itemName");
+		System.out.println("「検索」ボタンが押された");
+		System.out.println("category=" + category + "、itemNname=" + itemName);
+
+		//■itemSearchインスタンの生成
+		ItemBean itemSearch = new ItemBean(category, itemName);
+
+		HttpSession session = request.getSession();
+		session.setAttribute("itemSearch", itemSearch);
+
+		// 検索した商品を取得
+		SearchItemLogic searchItemLogic = new SearchItemLogic();
+		List<ItemBean> itemList = searchItemLogic.execute(itemSearch);
+
+		session.setAttribute("itemList", itemList);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
+
+		dispatcher.forward(request, response);
+
+		} else {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
+
+		HttpSession session = request.getSession();
+		UserBean loginUser = (UserBean)session.getAttribute("loginUser");
+
+		System.out.println("LoginServeltからShoppingServletに遷移");
+
+		// 商品一覧を取得
+		GetItemListLogic getItemListLogic = new GetItemListLogic();
+		List<ItemBean> itemList = getItemListLogic.execute();
+
+		session.setAttribute("itemList", itemList);
+
+		// ■管理者の場合
+		if(loginUser.getUserName().equals("admin") && loginUser.getPass().equals("adminpassword")) {
+			System.out.println("管理者としてログイン");
+			System.out.println("▼▼「管理者画面」ページ");
+
+			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin.jsp");
+
+		} else {
+			System.out.println("一般ユーザーとしてログイン");
+			System.out.println("▼▼「商品リスト」ページ");
+
+			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
+		}
+
 		dispatcher.forward(request, response);
 	}
-
+	}
 }
