@@ -32,7 +32,7 @@ public class HistoryDAO {
 
 			System.out.println("ユーザーの注文履歴を取得");
 
-			String sql = "SELECT order_id, user_id, purchase_date, item_id, name, price * purchase_num AS \"subtotal\", purchase_num\r\n"
+			String sql = "SELECT order_id, user_id, purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num\r\n"
 					+ "FROM history JOIN item\r\n"
 					+ "ON history.item_id = item.id\r\n"
 					+ "WHERE user_id = ?\r\n"
@@ -45,8 +45,7 @@ public class HistoryDAO {
 			// SQL文を実行
 			ResultSet rs = pStmt.executeQuery();
 
-//			System.out.println("SELECT order_id, purchase_date, user_id, item_id, purchase_num FROM history WHERE user_id = \"" + user.getId() + "\"");
-			System.out.println("SELECT order_id, user_id, purchase_date, item_id, name, price * purchase_num AS \"subtotal\", purchase_num FROM history JOIN item\r\n"
+			System.out.println("SELECT order_id, user_id, purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num FROM history JOIN item\r\n"
 					+ "ON history.item_id = item.id WHERE user_id = \"3\" GROUP BY item_id;");
 
 			while (rs.next()) {
@@ -55,15 +54,14 @@ public class HistoryDAO {
 				String purchaseDate = rs.getString("purchase_date");
 
 				String name = rs.getString("name");
-				int price = rs.getInt("subtotal");
+				int price = rs.getInt("price");
+				int subtotal = rs.getInt("subtotal");
 
 				int userId = rs.getInt("user_id");
 				String itemId = rs.getString("item_id");
 				int purchaseNum = rs.getInt("purchase_num");
 
-
-
-				HistoryBean history = new HistoryBean(orderId, purchaseDate, name, price, userId, itemId, purchaseNum);
+				HistoryBean history = new HistoryBean(orderId, purchaseDate, name, price, subtotal, userId, itemId, purchaseNum);
 				historyList.add(history);
 			}
 

@@ -32,24 +32,27 @@
 <c:forEach var="item" items="${itemList}" >
 	<tr><td colspan="3"><img src="img/${item.item_id}.jpg" width="200" height="200"></td></tr>
     <tr>
-        <form>
+        <form action="/shopping/CartServlet" method="post">
         <td>${item.name}</td>
         <td><span>¥</span>${item.price}</td>
+        <input type="hidden" name="name" value="${item.name}">
+        <input type="hidden" name="price" value="${item.price}">
+
         <c:choose>
 
         <%-- ■在庫切れのチェック --%>
         <c:when test="${item.quantity > 0}">
 	        <td>
-	        <select>
-	        <c:forEach var="i" begin="0" end="${item.quantity}" step="1">
+	        <select name="quantity">
+	        <c:forEach var="i" begin="1" end="${item.quantity}" step="1">
 	        <option value="<c:out value="${i}" />"><c:out value="${i}" /></option>
 	        </c:forEach>
 	        </select>
 	        </td>
-	        <td><button type="submit">カートに入れる</button></td>
+	        <td><button type="submit" name="item_id" value="${item.item_id}">カートに入れる</button></td>
        </c:when>
         <c:otherwise>
-			<td colspan="2">現在在庫切れです</td>
+			<td colspan="2">現在在庫切れです！</td>
 	        </c:otherwise>
         </c:choose>
         </form>

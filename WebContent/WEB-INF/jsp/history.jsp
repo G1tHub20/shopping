@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -13,20 +14,30 @@
 <jsp:include page="/WEB-INF/jsp/header.jsp" />
 <h1>注文履歴</h1>
 <table>
-    <tr><th>注文日</th><th>商品名</th><th>金額</th><th>数量</th></tr>
+    <tr><th>注文日</th><th>商品名</th><th>価格</th><th>数量</th><th>小計</th></tr>
     <c:forEach var="history" items="${historyList}" >
     <tr>
         <td>${history.purchaseDate}</td>
         <td>${history.name}</td>
-        <td><span>¥</span>${history.price}</td>
+        <td>${history.price}</td>
         <td>${history.purchaseNum}</td>
+        <td><span>¥</span>${history.subtotal}</td>
     </tr>
     </c:forEach>
 </table>
-<c:forEach var="history" items="${historyList}" >
-${history.price += history.price} </c:forEach>
 
-<p><span>合計金額：¥</span>110,000（仮）</p></tr>
+<%
+int total = 0;
+int[] historyPrice = {500000, 4000};
+for (int subtotal : historyPrice) {
+	total += subtotal;
+}
+%>
+
+
+<tr>
+<p><span>合計：¥</span><%= total %>(仮)</p>
+</tr>
 <a href="ShoppingServlet?action=itemList">商品リストに戻る</a>
 
 <script src="js/nav.js"></script>

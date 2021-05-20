@@ -9,6 +9,7 @@ public class HistoryBean {
 
 	private String name;
 	private int price;
+	private int subtotal;
 
 	public HistoryBean() {}
 
@@ -21,12 +22,13 @@ public class HistoryBean {
 		this.purchaseNum = purchaseNum;
 	}
 
-	public HistoryBean(int orderId, String purchaseDate, String name, int price, int userId, String itemId, int purchaseNum) {
+	public HistoryBean(int orderId, String purchaseDate, String name, int price, int subtotal, int userId, String itemId, int purchaseNum) {
 		this.orderId = orderId;
 		this.purchaseDate = purchaseDate;
 
 		this.name = name;
 		this.price = price;
+		this.subtotal = subtotal;
 
 		this.userId = userId;
 		this.itemId = itemId;
@@ -54,5 +56,8 @@ public class HistoryBean {
 	}
 	public int getPrice() {
 		return price;
+	}
+	public int getSubtotal() {
+		return subtotal;
 	}
 }

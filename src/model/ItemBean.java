@@ -5,8 +5,17 @@ public class ItemBean {
 	private String name;
 	private int price;
 	private int quantity;
+	private int subtotal;
 
 	public ItemBean() {}
+
+	public ItemBean(String item_id, String name, int price, int quantity, int subtotal) {
+		this.item_id = item_id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.subtotal = subtotal;
+	}
 
 	public ItemBean(String item_id, String name, int price, int quantity) {
 		this.item_id = item_id;
@@ -31,5 +40,8 @@ public class ItemBean {
 	}
 	public int getQuantity() {
 		return quantity;
+	}
+	public int getSubtotal() {
+		return subtotal;
 	}
 }
