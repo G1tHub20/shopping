@@ -38,18 +38,18 @@ public class LoginServlet extends HttpServlet {
 		if(loginUser.getUserName() == null) {
 			System.out.println("ログイン失敗");
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginFailure.jsp");
+			dispatcher.forward(request, response);
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginUser", loginUser);
+			//■ShoppingServletにフォワード
+			dispatcher = request.getRequestDispatcher("/ShoppingServlet");
+			System.out.println(loginUser.getUserName());
+
+			dispatcher.forward(request, response);
+		}
 
 	}
-
-		//■ShoppingServletにフォワード
-		dispatcher = request.getRequestDispatcher("/ShoppingServlet");
-		System.out.println(loginUser.getUserName());
-
-		dispatcher.forward(request, response);
-}
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

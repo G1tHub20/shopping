@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>管理者画面</title>
 </head>
 <jsp:include page="/WEB-INF/jsp/header.jsp" />
