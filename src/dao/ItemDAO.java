@@ -16,7 +16,7 @@ public class ItemDAO {
 	private final String DB_USER = "root";
 	private final String DB_PASS = "mysqlpa55";
 
-	// ◆itemテーブルから全レコードを取得するメソッド
+	// ◆全レコードを取得するメソッド
 	public List<ItemBean> getItem() {
 		List<ItemBean> itemList = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class ItemDAO {
 	}
 
 
-	// ◆itemテーブルから検索条件に一致するレコードを取得するメソッド
+	// ◆検索条件に一致するレコードを取得するメソッド
 	public List<ItemBean> searchItem(ItemBean itemSearch) {
 
 		List<ItemBean> itemList = new ArrayList<>();
@@ -104,5 +104,58 @@ public class ItemDAO {
 		}
 	System.out.println("--------------------------------------------------------------------");
 	return itemList;
+	}
+
+	// ◆注文された商品の在庫数を変更するメソッド
+	public int buyItem(ItemBean itemBuy) {
+
+		int user_id = 0;
+
+		// DB接続
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			System.out.println("--------------------------------------------------------------------");
+			System.out.println("itemDAO(buyItem)");
+
+//			int quantity = rs.getInt("quantity");
+			int purchaseNum = 1;
+			String item_id = "tie0002";
+
+			String sql = "UPDATE item\r\n"
+					+ "SET quantity = quantity - 1\r\n"
+					+ "WHERE id = \"tie0002\"";
+
+			System.out.println("UPDATEを実行");
+			System.out.println(sql);
+
+//			String sql = "UPDATE item\r\n"
+//					+ "SET quantity = quantity - ?\r\n"
+//					+ "WHERE id = \"tie0002\".\r\n";
+//
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+//			pStmt.setInt(1, purchaseNum);
+//			pStmt.setString(2, item_id);
+
+
+			// これを取得すべし！
+			// 購入履歴を反映するユーザーを特定するための値
+			user_id = 3;
+
+
+			// UPDATEを実行
+			int result = pStmt.executeUpdate();
+
+			if (result != 1) {
+				System.out.println("注文できませんでした");
+				return 0;
+			}
+
+		} catch (SQLException e) {
+			// quantityがマイナスになるとき例外処理したい！
+			e.printStackTrace();
+			System.out.println("DB接続しっぱい");
+		}
+	System.out.println("--------------------------------------------------------------------");
+	System.out.println("注文完了（itemテーブルの在庫更新");
+	return user_id;
 	}
 }

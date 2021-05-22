@@ -29,6 +29,11 @@ public class ItemBean {
 		this.name = name;
 	}
 
+	public ItemBean(String item_id, int quantity) {
+		this.item_id = item_id;
+		this.quantity = quantity;
+	}
+
 	public String getItem_id() {
 		return item_id;
 	}

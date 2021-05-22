@@ -1,11 +1,13 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+//import java.util.Date;
 import java.util.List;
 
 import model.HistoryBean;
@@ -16,7 +18,7 @@ public class HistoryDAO {
 	private final String DB_USER = "root";
 	private final String DB_PASS = "mysqlpa55";
 
-	// ◆itemテーブルからレコードを取得するメソッド
+	// ◆ユーザーの全レコードを取得するメソッド
 	public List<HistoryBean> getHistory(UserBean loginUser) {
 		UserBean user = loginUser;
 		List<HistoryBean> historyList = new ArrayList<>();
@@ -73,5 +75,55 @@ public class HistoryDAO {
 		}
 		System.out.println("--------------------------------------------------------------------");
 		return historyList;
+	}
+
+	// ◆ユーザーのレコードを更新するメソッド
+	public boolean updateHistory(int id) {
+
+		String purchase_date = "2021-05-22";
+
+//		java.util.Date sqlDate = new java.util.Date();
+		java.sql.Date sqlDate = Date.valueOf(purchase_date);
+
+
+		int user_id = 3;
+		String item_id = "tie0002";
+		int purchase_num = 1;
+
+
+		// DB接続
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			System.out.println("--------------------------------------------------------------------");
+			System.out.println("historyDAO(updateHistory)");
+
+			String sql = "INSERT INTO history(purchase_date, user_id, item_id, purchase_num)\r\n"
+					+ "VALUES(?, ?, ?, ?)";
+
+
+
+
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+//			pStmt.setInt(1, purchase_date);
+			pStmt.setDate(1, sqlDate);
+			pStmt.setInt(2, user_id);
+			pStmt.setString(3, item_id);
+			pStmt.setInt(4, purchase_num);
+
+			System.out.println("UPDATEを実行");
+			System.out.println("INSERT INTO history(purchase_date, user_id, item_id, purchase_num)\r\n"
+					+ "VALUES(" + sqlDate + "," + user_id + "," + item_id + "," + purchase_num + ")");
+
+			// UPDATEを実行
+			int result = pStmt.executeUpdate(); // 判定が必要
+
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB接続しっぱい");
+		}
+		System.out.println("--------------------------------------------------------------------");
+		System.out.println("historyテーブルにも反映");
+		return true;
 	}
 }

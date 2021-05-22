@@ -52,7 +52,7 @@
 	        <td><button type="submit" name="item_id" value="${item.item_id}">カートに入れる</button></td>
        </c:when>
         <c:otherwise>
-			<td colspan="2">現在在庫切れです！</td>
+			<td colspan="2">現在、在庫切れです！</td>
 	        </c:otherwise>
         </c:choose>
         </form>
