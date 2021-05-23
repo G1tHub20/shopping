@@ -81,9 +81,6 @@ public class ItemDAO {
 			pStmt.setString(1,  "%" + searchWord1 + "%");
 			pStmt.setString(2,  searchWord2 + "%");
 
-//			sql = "SELECT * FROM item WHERE name LIKE '%時計%' AND id LIKE 'wat%'";
-//			pStmt = conn.prepareStatement(sql); // テスト
-
 			// SELECTを実行
 			ResultSet rs = pStmt.executeQuery();
 
@@ -107,47 +104,67 @@ public class ItemDAO {
 	}
 
 	// ◆注文された商品の在庫数を変更するメソッド
-	public int buyItem(ItemBean itemBuy) {
-
-		int user_id = 0;
+	public boolean buyItem(ItemBean itemBuy) {
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 			System.out.println("--------------------------------------------------------------------");
 			System.out.println("itemDAO(buyItem)");
 
-//			int quantity = rs.getInt("quantity");
-			int purchaseNum = 1;
+			int purchaseNum = 3;
 			String item_id = "tie0002";
 
-			String sql = "UPDATE item\r\n"
-					+ "SET quantity = quantity - 1\r\n"
-					+ "WHERE id = \"tie0002\"";
+			String sql1 = "SELECT quantity FROM item where id = ?";
+			System.out.println("SELECT quantity FROM item where id = " + item_id + "\"");
 
-			System.out.println("UPDATEを実行");
-			System.out.println(sql);
+			PreparedStatement pStm1 = conn.prepareStatement(sql1);
+			pStm1.setString(1, item_id);
 
-//			String sql = "UPDATE item\r\n"
-//					+ "SET quantity = quantity - ?\r\n"
-//					+ "WHERE id = \"tie0002\".\r\n";
-//
-			PreparedStatement pStmt = conn.prepareStatement(sql);
-//			pStmt.setInt(1, purchaseNum);
-//			pStmt.setString(2, item_id);
+			ResultSet rs1 = pStm1.executeQuery();
 
-
-			// これを取得すべし！
-			// 購入履歴を反映するユーザーを特定するための値
-			user_id = 3;
-
-
-			// UPDATEを実行
-			int result = pStmt.executeUpdate();
-
-			if (result != 1) {
-				System.out.println("注文できませんでした");
-				return 0;
+			int stock = 0;
+			if(rs1.next()){
+				stock = Integer.parseInt(rs1.getString("quantity"));
 			}
+
+
+
+			System.out.println("在庫数= " + stock);
+
+
+			String sql = "UPDATE item SET\r\n"
+					+ "  quantity =\r\n"
+					+ "    CASE\r\n"
+					+ "        WHEN 0 <= quantity-? THEN quantity - ?\r\n"
+					+ "        ELSE quantity\r\n"
+					+ "    END\r\n"
+					+ "WHERE id = ?;\r\n";
+
+
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+			pStmt.setInt(1, purchaseNum);
+			pStmt.setInt(2, purchaseNum);
+			pStmt.setString(3, item_id);
+
+
+			int result = 0;
+
+			if (stock - purchaseNum >= 0) {
+
+				System.out.println("在庫数足りてる！");
+			System.out.println("UPDATEを実行");
+			System.out.println("UPDATE item SET quantity = CASE WHEN 0 <= quantity - " + purchaseNum + " THEN quantity - " + purchaseNum + " ELSE quantity END WHERE id = " + item_id + ";");
+
+				// UPDATEを実行
+				result = pStmt.executeUpdate(); // SQLExceptionでエラーが出るため、これはエラー判定に使えない
+
+				System.out.println("注文完了（itemテーブルの在庫更新");
+
+			} else {
+				System.out.println("在庫数足りていない…");
+				return false;
+			}
+
 
 		} catch (SQLException e) {
 			// quantityがマイナスになるとき例外処理したい！
@@ -155,7 +172,7 @@ public class ItemDAO {
 			System.out.println("DB接続しっぱい");
 		}
 	System.out.println("--------------------------------------------------------------------");
-	System.out.println("注文完了（itemテーブルの在庫更新");
-	return user_id;
+
+	return true;
 	}
 }

@@ -25,18 +25,19 @@
     </c:forEach>
 </table>
 
+<%--
 <%
 int total = 0;
 int[] historyPrice = {500000, 4000};
 for (int subtotal : historyPrice) {
 	total += subtotal;
 }
-%>
-
 
 <tr>
 <p><span>合計：¥</span><%= total %>(仮)</p>
 </tr>
+
+--%>
 <a href="ShoppingServlet?action=itemList">商品リストに戻る</a>
 
 <script src="js/nav.js"></script>

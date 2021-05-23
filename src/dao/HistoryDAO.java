@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 //import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ public class HistoryDAO {
 	private final String DB_USER = "root";
 	private final String DB_PASS = "mysqlpa55";
 
-	// ◆ユーザーの全レコードを取得するメソッド
+	// ◆全レコードを取得するメソッド
 	public List<HistoryBean> getHistory(UserBean loginUser) {
 		UserBean user = loginUser;
 		List<HistoryBean> historyList = new ArrayList<>();
@@ -37,10 +38,8 @@ public class HistoryDAO {
 			String sql = "SELECT order_id, user_id, purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num\r\n"
 					+ "FROM history JOIN item\r\n"
 					+ "ON history.item_id = item.id\r\n"
-					+ "WHERE user_id = ?\r\n"
-					+ "GROUP BY item_id";
+					+ "WHERE user_id = ?\r\n";
 
-			System.out.println("sql=" + sql);
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, user.getId());
 
@@ -48,7 +47,7 @@ public class HistoryDAO {
 			ResultSet rs = pStmt.executeQuery();
 
 			System.out.println("SELECT order_id, user_id, purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num FROM history JOIN item\r\n"
-					+ "ON history.item_id = item.id WHERE user_id = \"3\" GROUP BY item_id;");
+					+ "ON history.item_id = item.id WHERE user_id = \"3\";");
 
 			while (rs.next()) {
 
@@ -77,12 +76,15 @@ public class HistoryDAO {
 		return historyList;
 	}
 
-	// ◆ユーザーのレコードを更新するメソッド
+	// ◆レコードを更新するメソッド
 	public boolean updateHistory(int id) {
 
-		String purchase_date = "2021-05-22";
+		// java.sql.Dateとクラス名が被りimportできないため、完全限定クラス名
+		java.util.Date today = new java.util.Date();
+		System.out.println(today);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String purchase_date = dateFormat.format(today);
 
-//		java.util.Date sqlDate = new java.util.Date();
 		java.sql.Date sqlDate = Date.valueOf(purchase_date);
 
 
@@ -98,9 +100,6 @@ public class HistoryDAO {
 
 			String sql = "INSERT INTO history(purchase_date, user_id, item_id, purchase_num)\r\n"
 					+ "VALUES(?, ?, ?, ?)";
-
-
-
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 //			pStmt.setInt(1, purchase_date);
