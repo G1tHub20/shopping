@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.BuyItemLogic;
 import model.GetHistoryLogic;
 import model.HistoryBean;
 import model.ItemBean;
 import model.UserBean;
-import test.BuyItemLogic;
 
 @WebServlet("/BuyItemServlet")
 public class BuyItemServlet extends HttpServlet {
@@ -51,29 +52,43 @@ public class BuyItemServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-//		String action = request.getParameter("action");
-//		if (action != null && action.equals("search")) {
-//        // 「検索」ボタンが押された場合は検索処理（商品絞り込み）
-//
-//		//■リクエストパラメータの取得
-//		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
-//		String category = request.getParameter("category");
-//		String itemName = request.getParameter("itemName");
-//		System.out.println("「検索」ボタンが押された");
-//		System.out.println("category=" + category + "、itemNname=" + itemName);
+		HttpSession session = request.getSession();
 
-		String item_id = "tie0002";
-		int purchaseNum = 1;
+		Map<String, List<Object>> cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+		// 格納された順に取り出したい
+//		cartItems.get("tie0001")
+
+    	System.out.println("セッションオブジェクト（cartItems）の中身を全て出力");
+		for (Object key : cartItems.keySet()) {
+		    System.out.println(key + " => " + cartItems.get(key));
+		}
+    	boolean isBuy = false;
+
+		for (Object key : cartItems.keySet()) {
+			String item_id = (String) key;
+			int purchaseNum = (int) cartItems.get(key).get(2);
+			int userId = (int) cartItems.get(key).get(4);
+
+			//■itemSearchインスタンの生成
+			ItemBean itemBuy = new ItemBean(item_id, purchaseNum, userId);
+
+			BuyItemLogic buyItemLogic = new BuyItemLogic();
+			isBuy = buyItemLogic.execute(itemBuy);
+
+		}
+
+//		String item_id = "tie0002";
+//		int purchaseNum = 1;
 
 		//■itemSearchインスタンの生成
-		ItemBean itemBuy = new ItemBean(item_id, purchaseNum);
+//		ItemBean itemBuy = new ItemBean(item_id, purchaseNum);
 
 //		HttpSession session = request.getSession();
 //		session.setAttribute("itemSearch", itemSearch);
 
 		// 注文を反映
-		BuyItemLogic buyItemLogic = new BuyItemLogic();
-		boolean isBuy = buyItemLogic.execute(itemBuy);
+//		BuyItemLogic buyItemLogic = new BuyItemLogic();
+//		boolean isBuy = buyItemLogic.execute(itemBuy);
 
 		RequestDispatcher dispatcher;
 
@@ -85,7 +100,6 @@ public class BuyItemServlet extends HttpServlet {
 
 		} else {
 
-    	HttpSession session = request.getSession();
     	System.out.println("セッションオブジェクト（cartItems）の削除");
     	session.removeAttribute("cartItems");
 

@@ -39,8 +39,6 @@
 
 </table>
 
-<!--  カートが空なら「ショッピングカートに商品はありません」 -->
-
 
 <%-- int[] cart = {500000, 4000};
 for (int subtotal : cart) {
@@ -49,11 +47,15 @@ for (int subtotal : cart) {
 int total += item.subtotal;
 } --%>
 
-<c:if test="${item.subtotal > 0}">
+<%-- <c:if test="${item.subtotal > 0}">
 <p><span>合計：¥</span>${item.subtotal}(仮)</p>
+</c:if> --%>
+<c:if test="${empty cartItems}">
+<p>お客様のカートに商品はありません。</p>
 </c:if>
 <form action="/shopping/BuyItemServlet" method="post">
 <button type="submit">注文確定</button>
+<button type="submit" disabled>お買い物を続ける</button>
 </form>
 
 <c:if test="${errorMsg != null}">

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.HistoryBean;
+import model.ItemBean;
 import model.UserBean;
 
 public class HistoryDAO {
@@ -41,7 +42,7 @@ public class HistoryDAO {
 					+ "WHERE user_id = ?\r\n";
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-			pStmt.setInt(1, user.getId());
+			pStmt.setInt(1, user.getUserId());
 
 			// SQL文を実行
 			ResultSet rs = pStmt.executeQuery();
@@ -77,7 +78,7 @@ public class HistoryDAO {
 	}
 
 	// ◆レコードを更新するメソッド
-	public boolean updateHistory(int id) {
+	public boolean updateHistory(ItemBean itemBuy) {
 
 		// java.sql.Dateとクラス名が被りimportできないため、完全限定クラス名
 		java.util.Date today = new java.util.Date();
@@ -88,9 +89,9 @@ public class HistoryDAO {
 		java.sql.Date sqlDate = Date.valueOf(purchase_date);
 
 
-		int user_id = 3;
-		String item_id = "tie0002";
-		int purchase_num = 1;
+		int user_id = itemBuy.getUser_id();
+		String item_id = itemBuy.getItem_id();
+		int purchaseNum = itemBuy.getQuantity();
 
 
 		// DB接続
@@ -106,11 +107,11 @@ public class HistoryDAO {
 			pStmt.setDate(1, sqlDate);
 			pStmt.setInt(2, user_id);
 			pStmt.setString(3, item_id);
-			pStmt.setInt(4, purchase_num);
+			pStmt.setInt(4, purchaseNum);
 
 			System.out.println("UPDATEを実行");
 			System.out.println("INSERT INTO history(purchase_date, user_id, item_id, purchase_num)\r\n"
-					+ "VALUES(" + sqlDate + "," + user_id + "," + item_id + "," + purchase_num + ")");
+					+ "VALUES(" + sqlDate + "," + user_id + "," + item_id + "," + purchaseNum + ")");
 
 			// UPDATEを実行
 			int result = pStmt.executeUpdate(); // 判定が必要

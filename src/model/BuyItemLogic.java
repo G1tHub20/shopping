@@ -1,24 +1,24 @@
-package test;
+package model;
 
 import dao.HistoryDAO;
 import dao.ItemDAO;
-import model.ItemBean;
 
 public class BuyItemLogic {
 	public boolean execute(ItemBean itemBuy) {
         // DAOクラスをインスタンス化
 		ItemDAO dao = new ItemDAO();
-		// DAOのメソッド
+		// ■itemテーブルに商品の注文を反映
 		boolean is_updateHistory = dao.buyItem(itemBuy);
 
-		// これを取得しないと
-		int user_id = 3;
 
+
+
+		//■historyテーブルに注文履歴を反映
 		if (is_updateHistory) {
 			HistoryDAO dao2 = new HistoryDAO();
-			// DAOのメソッド
-
-			Boolean isBuy = dao2.updateHistory(user_id);
+			// これを取得しないと
+			// javaからではsessionを取得できないので、オブジェクトでもらう必要がある
+			Boolean isBuy = dao2.updateHistory(itemBuy);
 
 			if (isBuy) {
 			System.out.println("履歴テーブル更新完了！");

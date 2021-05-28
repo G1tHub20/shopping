@@ -25,19 +25,10 @@
     </c:forEach>
 </table>
 
-<%--
-<%
-int total = 0;
-int[] historyPrice = {500000, 4000};
-for (int subtotal : historyPrice) {
-	total += subtotal;
-}
+<c:if test="${empty historyList}">
+<p>お客様の注文履歴はありません。</p>
+</c:if>
 
-<tr>
-<p><span>合計：¥</span><%= total %>(仮)</p>
-</tr>
-
---%>
 <a href="ShoppingServlet?action=itemList">商品リストに戻る</a>
 
 <script src="js/nav.js"></script>

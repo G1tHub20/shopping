@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("loginUser", loginUser);
 			//■ShoppingServletにフォワード
 			dispatcher = request.getRequestDispatcher("/ShoppingServlet");
-			System.out.println(loginUser.getUserName());
+			System.out.println("セッションにloginUser情報を保存：" + loginUser.getUserName());
 
 			dispatcher.forward(request, response);
 		}

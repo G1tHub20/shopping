@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import model.UserBean;
+
 @WebServlet("/CartServlet")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -43,21 +45,27 @@ public class CartServlet extends HttpServlet {
 //		List<Integer> item1 = null; // ←微妙…
 		List<Object> item1 = null; // ←微妙…
 		HttpSession session = request.getSession();
-//		cartItems = (Map<String, List<Integer>>) session.getAttribute("cartItems");
+//		UserBean loginUser = (UserBean) request.getAttribute("loginUser"); // × request → ○ session
+		UserBean loginUser = (UserBean) session.getAttribute("loginUser");
+
+
+		int userId = loginUser.getUserId();
+
 		cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
 
 		// cartItemsが存在しない（初めてカートに入れる）とき
 		if (cartItems == null || cartItems.size() == 0) { // サイズチェックは必要？
-//			cartItems = new HashMap<String, List<Integer>>();
 		cartItems = new HashMap<String, List<Object>>();
 
-//		item1 = new ArrayList<Integer>();
 		item1 = new ArrayList<Object>();
 		System.out.println(item_id + "の情報を" + "item1インスタンスに格納");
 		item1.add(name);//Listの末尾に値を追加
 		item1.add(price);
 		item1.add(quantity);
 		item1.add(subtotal);
+		// 改善できないか？各商品にいちいちユーザーidを渡している…
+		item1.add(userId);
+
 		System.out.println(item1 + "（" + item_id + "）を" + "cartItemsに追加");
 		cartItems.put(item_id, item1); //Map型にデータを追加
 
@@ -89,7 +97,6 @@ public class CartServlet extends HttpServlet {
 
 			if (cartItems.get(item_id) != null) {
 				// カートに入れた商品の個数を変更するとき
-
 				item1.set(2, ((int)item1.get(2) + quantity));
 				item1.set(3, ((int)item1.get(3) + subtotal));
 				cartItems.put(item_id, item1);
@@ -100,6 +107,7 @@ public class CartServlet extends HttpServlet {
 				item2.add(price);
 				item2.add(quantity);
 				item2.add(price * quantity);
+				item2.add(userId);
 				cartItems.put(item_id, item2);
 
 			//■itemインスタンの生成

@@ -1,6 +1,5 @@
-package test;
+package model;
 
-import model.LoginLogic;
 import servlet.LoginServlet;
 
 public class LoginLogicTest {

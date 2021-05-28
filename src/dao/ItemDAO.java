@@ -111,8 +111,8 @@ public class ItemDAO {
 			System.out.println("--------------------------------------------------------------------");
 			System.out.println("itemDAO(buyItem)");
 
-			int purchaseNum = 3;
-			String item_id = "tie0002";
+			int purchaseNum = itemBuy.getQuantity();
+			String item_id = itemBuy.getItem_id();
 
 			String sql1 = "SELECT quantity FROM item where id = ?";
 			System.out.println("SELECT quantity FROM item where id = " + item_id + "\"");
@@ -128,9 +128,7 @@ public class ItemDAO {
 			}
 
 
-
 			System.out.println("在庫数= " + stock);
-
 
 			String sql = "UPDATE item SET\r\n"
 					+ "  quantity =\r\n"
@@ -139,7 +137,6 @@ public class ItemDAO {
 					+ "        ELSE quantity\r\n"
 					+ "    END\r\n"
 					+ "WHERE id = ?;\r\n";
-
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, purchaseNum);
@@ -150,21 +147,19 @@ public class ItemDAO {
 			int result = 0;
 
 			if (stock - purchaseNum >= 0) {
-
 				System.out.println("在庫数足りてる！");
+
 			System.out.println("UPDATEを実行");
 			System.out.println("UPDATE item SET quantity = CASE WHEN 0 <= quantity - " + purchaseNum + " THEN quantity - " + purchaseNum + " ELSE quantity END WHERE id = " + item_id + ";");
 
 				// UPDATEを実行
 				result = pStmt.executeUpdate(); // SQLExceptionでエラーが出るため、これはエラー判定に使えない
-
 				System.out.println("注文完了（itemテーブルの在庫更新");
 
 			} else {
 				System.out.println("在庫数足りていない…");
 				return false;
 			}
-
 
 		} catch (SQLException e) {
 			// quantityがマイナスになるとき例外処理したい！

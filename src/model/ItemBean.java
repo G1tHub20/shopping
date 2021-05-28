@@ -6,6 +6,7 @@ public class ItemBean {
 	private int price;
 	private int quantity;
 	private int subtotal;
+	private int user_id;
 
 	public ItemBean() {}
 
@@ -33,6 +34,11 @@ public class ItemBean {
 		this.item_id = item_id;
 		this.quantity = quantity;
 	}
+	public ItemBean(String item_id, int quantity, int user_id) {
+		this.item_id = item_id;
+		this.quantity = quantity;
+		this.user_id = user_id;
+	}
 
 	public String getItem_id() {
 		return item_id;
@@ -43,10 +49,13 @@ public class ItemBean {
 	public int getPrice() {
 		return price;
 	}
-	public int getQuantity() {
+	public int getQuantity() { // getPurchaseNum()も兼用
 		return quantity;
 	}
 	public int getSubtotal() {
 		return subtotal;
+	}
+	public int getUser_id() {
+		return user_id;
 	}
 }

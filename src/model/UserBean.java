@@ -19,7 +19,7 @@ public class UserBean implements Serializable {
 		this.pass = pass;
 	}
 
-	public int getId() {
+	public int getUserId() {
 		return userId;
 	}
 	public String getUserName() {
