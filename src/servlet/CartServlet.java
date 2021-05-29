@@ -30,11 +30,11 @@ public class CartServlet extends HttpServlet {
 		int quantity = Integer.parseInt(request.getParameter("quantity"));
 		int subtotal = price * quantity;
 
-//		int total = 0;
-
 		System.out.println("「カートに入れる」ボタンが押された");
-//		System.out.println("item_id=" + item_id + "、name=" + name + "、price=" + price + "、quantity=" + quantity + "、subtotal=" + subtotal);
 		System.out.println("item_id=" + item_id + "、price=" + price + "、quantity=" + quantity);
+
+		// カート画面に表示させるメッセージ
+		request.setAttribute("cartMsg", name + " " + quantity + "点 が追加されました");
 
 
 //		■HashMap：1つのキー、複数の値(price, quantity、subtotal)
@@ -55,45 +55,27 @@ public class CartServlet extends HttpServlet {
 
 		// cartItemsが存在しない（初めてカートに入れる）とき
 		if (cartItems == null || cartItems.size() == 0) { // サイズチェックは必要？
-		cartItems = new HashMap<String, List<Object>>();
+			cartItems = new HashMap<String, List<Object>>();
 
-		item1 = new ArrayList<Object>();
-		System.out.println(item_id + "の情報を" + "item1インスタンスに格納");
-		item1.add(name);//Listの末尾に値を追加
-		item1.add(price);
-		item1.add(quantity);
-		item1.add(subtotal);
-		// 改善できないか？各商品にいちいちユーザーidを渡している…
-		item1.add(userId);
+			item1 = new ArrayList<Object>();
+			System.out.println(item_id + "の情報を" + "item1インスタンスに格納");
+			item1.add(name);//Listの末尾に値を追加
+			item1.add(price);
+			item1.add(quantity);
+			item1.add(subtotal);
+			item1.add(userId);// 改善できないか？各商品にいちいち同じユーザーidを渡している…
 
-		System.out.println(item1 + "（" + item_id + "）を" + "cartItemsに追加");
-		cartItems.put(item_id, item1); //Map型にデータを追加
-
-		// 各キーの値
-		System.out.println("「tie0001」キーの値 = " + cartItems.get("tie0001"));
-		System.out.println("「tie0002」キーの値 = " + cartItems.get("tie0002"));
-		System.out.println("「wal0001」キーの値 = " + cartItems.get("wal0001"));
+			System.out.println(item1 + "（" + item_id + "）を" + "cartItemsに追加");
+			cartItems.put(item_id, item1); //Map型にデータを追加
 
 		} else {
-		// cartItemsが既に存在する（カートに追加する）とき
-//		} else if (cartItems != null) {
+			cartItems = new HashMap<String, List<Object>>();
+			item1 = null;
 
-
-		// 「tie0001」に1追加 [3000, 1, 3000]
-//		item_id = "tie0001";
-//		price = 2000;
-//		quantity = 1;
-//		subtotal = price * quantity;
-
-//			cartItems = new HashMap<String, List<Integer>>();
-		cartItems = new HashMap<String, List<Object>>();
-		item1 = null;
-
-		session = request.getSession();
-//		cartItems = (Map<String, List<Integer>>) session.getAttribute("cartItems");
-		cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
-		item1 = cartItems.get(item_id);
-
+			session = request.getSession();
+	//		cartItems = (Map<String, List<Integer>>) session.getAttribute("cartItems");
+			cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+			item1 = cartItems.get(item_id);
 
 			if (cartItems.get(item_id) != null) {
 				// カートに入れた商品の個数を変更するとき
@@ -132,11 +114,17 @@ public class CartServlet extends HttpServlet {
 
 		// 「削除」ボタンが押された場合
 		String item_id = request.getParameter("item_id");
+		String item_name = request.getParameter("item_name");
+
+		// カート画面に表示させるメッセージ
+		if (item_id != null) {
+			request.setAttribute("cartMsg", item_name + " はカートから削除されました");
+		}
 
 		HttpSession session = request.getSession();
 		Map<String, List<Object>> cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
 
-		if (cartItems != null) { // 例外エラー対策
+		if (cartItems != null) { // 例外エラー対策 // ←？？
 			cartItems.remove(item_id);
 			System.out.println(item_id + "をカートから削除した");
 		}

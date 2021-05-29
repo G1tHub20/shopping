@@ -19,19 +19,12 @@
     <c:forEach var="item" items="${cartItems}">
     	<form action="/shopping/CartServlet" method="get">
     	<tr>
-    	<input type="hidden" name="item_id" value="${item.key}">
         <td>${item.value[0]}</td>
         <td>${item.value[1]}</td>
-
-        <%-- <td>
-        <select name="quantity">
-	        <c:forEach var="i" begin="1" end="5" step="1">
-	        <option value="<c:out value="${i}" />"><c:out value="${i}" /></option>
-	        </c:forEach>
-	    </select>
-	    </td> --%>
         <td>${item.value[2]}</td>
         <td>${item.value[3]}</td>
+    	<input type="hidden" name="item_name" value="${item.value[0]}">
+    	<input type="hidden" name="item_id" value="${item.key}">
         <td><button type="submit" name="${item.key}">削除</button></td>
        </tr>
        </form>
@@ -39,29 +32,18 @@
 
 </table>
 
-
-<%-- int[] cart = {500000, 4000};
-for (int subtotal : cart) {
-	total += subtotal;
-
-int total += item.subtotal;
-} --%>
-
-<%-- <c:if test="${item.subtotal > 0}">
-<p><span>合計：¥</span>${item.subtotal}(仮)</p>
-</c:if> --%>
-<c:if test="${empty cartItems}">
-<p>お客様のカートに商品はありません。</p>
-</c:if>
 <form action="/shopping/BuyItemServlet" method="post">
 <button type="submit">注文確定</button>
-<button type="submit" disabled>お買い物を続ける</button>
+<%-- <button type="submit" disabled>お買い物を続ける</button> --%>
 </form>
 
-<c:if test="${errorMsg != null}">
-<p>${errorMsg}</p>
+<c:if test="${not empty cartMsg}">
+	<p>${cartMsg}</p>
 </c:if>
 
+<c:if test="${empty cartItems}">
+	<p>お客様のカートに商品はありません。</p>
+</c:if>
 <a href="ShoppingServlet?action=itemList">商品リストに戻る</a>
 
 <script src="js/nav.js"></script>
