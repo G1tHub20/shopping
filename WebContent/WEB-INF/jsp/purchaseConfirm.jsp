@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8">
 <title>注文</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="/WEB-INF/jsp/header.jsp" />

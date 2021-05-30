@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <title>アカウント登録</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <h1>アカウント登録</h1>

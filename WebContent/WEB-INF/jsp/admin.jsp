@@ -6,8 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>管理者画面</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <jsp:include page="/WEB-INF/jsp/header.jsp" />
 <body>
@@ -26,7 +26,7 @@
 
 
 <h2>商品リストの変更</h2>
-<form method="POST" action="" name="edit">
+<form method="POST" action="" name="edit" id="adminForm">
     <table>
         <tr></tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
         <tr>
@@ -37,7 +37,7 @@
             <option value="wallet">ブラウン長財布</option>
         </select></td>
         <td><span>¥</span><input type="text" value="90000"></td>
-        <td><input type="num" value="3"></td>
+        <td><input type="number" value="3"></td>
         <td><button type="submit" id="edit">確定する</button></td>
     </tr>
     </table>

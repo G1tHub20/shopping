@@ -6,9 +6,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link href="css/style.css" rel="stylesheet" type="text/css" />
 <title>商品リスト</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="/WEB-INF/jsp/header.jsp" />

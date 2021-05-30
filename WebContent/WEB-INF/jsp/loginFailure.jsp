@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <title>ログイン失敗</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>

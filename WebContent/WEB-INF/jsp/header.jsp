@@ -4,13 +4,25 @@
 
 <%-- header --%>
 <header>
-	<%-- ログイン後のページでは、「ユーザー名」「注文履歴」「ログアウト」を共通で表示 --%>
-	<p>「${loginUser.userName}さん」
+<%-- ログイン後のページでは、「ユーザー名」「注文履歴」「ログアウト」を共通で表示 --%>
 
+<script type="text/javascript">
+function check(){
+	if(window.confirm('ログアウトします。よろしいですか？')){ // 確認ダイアログを表示
+		return true; // 「OK」時は実行
+	}
+	else{
+		return false; //  // 「キャンセル」時は中止
+	}
+}
+</script>
+
+	<p>「${loginUser.userName}さん」
 	<c:if test="${loginUser.userName != 'admin'}"><%-- <c:if test="${action != 'history'}"> 文字列の比較だがequalsを使わない --%>
 	<a href="ShoppingServlet?action=history">注文履歴</a>
 	<a href="CartServlet">カート</a>
 	</c:if>
-	<a href="LoginServlet?action=logout">ログアウト</a>
+	<a href="LoginServlet?action=logout" onclick="return confirm('ログアウトします。よろしいですか?')">ログアウト</a>
 	</p>
+
 </header>

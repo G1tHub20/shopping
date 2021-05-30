@@ -48,8 +48,8 @@ public class CartServlet extends HttpServlet {
 //		UserBean loginUser = (UserBean) request.getAttribute("loginUser"); // × request → ○ session
 		UserBean loginUser = (UserBean) session.getAttribute("loginUser");
 
-
 		int userId = loginUser.getUserId();
+
 
 		cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
 
@@ -83,27 +83,36 @@ public class CartServlet extends HttpServlet {
 				item1.set(3, ((int)item1.get(3) + subtotal));
 				cartItems.put(item_id, item1);
 			} else {
+				// 別の商品を追加するとき
 //				List<Integer> item2 = new ArrayList<Integer>();
 				List<Object> item2 = new ArrayList<Object>();
 				item2.add(name);
 				item2.add(price);
 				item2.add(quantity);
-				item2.add(price * quantity);
+				subtotal = price * quantity;
+				item2.add(subtotal);
 				item2.add(userId);
 				cartItems.put(item_id, item2);
 
 			//■itemインスタンの生成
 	//		ItemBean item = new ItemBean(item_id, name, price, quantity, subtotal);
 			}
-			// 各キーの値
-			System.out.println("「tie0001」キーの値 = " + cartItems.get("tie0001"));
-			System.out.println("「tie0002」キーの値 = " + cartItems.get("tie0002"));
-			System.out.println("「wal0001」キーの値 = " + cartItems.get("wal0001"));
+		}
+
+		// 合計金額を算出
+		int total = 0;
+		for (String key : cartItems.keySet()) {
+			total += (int)cartItems.get(key).get(3);
 		}
 
 		// cartItemsをセッションに保存
 		System.out.println("cartItemsをセッションに保存");
 		session.setAttribute("cartItems", cartItems);
+
+		// 合計金額totalをセッションパラメータに保存
+		session.setAttribute("total", total);
+		System.out.println("total= " + session.getAttribute("total"));
+		System.out.println("合計金額（total）= " + total);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
 		dispatcher.forward(request, response);
@@ -112,21 +121,35 @@ public class CartServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		String action = request.getParameter("action");
+		if (action != null && action.equals("delete")) {
 		// 「削除」ボタンが押された場合
 		String item_id = request.getParameter("item_id");
 		String item_name = request.getParameter("item_name");
+//		int total = 0;
+		HttpSession session = request.getSession();
+		int total = (int)session.getAttribute("total");
+
+		System.out.println(item_id + "の削除ボタンが押された");
+
+		Map<String, List<Object>> cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+
+		if (cartItems != null) { // 例外エラー対策 // ←？？
+
+			System.out.println("cartItemsはnullじゃない");
+
+			int subtotal = (int)cartItems.get(item_id).get(3);
+			total -= subtotal;
+			session.setAttribute("total", total);
+			cartItems.remove(item_id);
+			System.out.println(item_id + "をカートから削除した");
+		}
 
 		// カート画面に表示させるメッセージ
 		if (item_id != null) {
 			request.setAttribute("cartMsg", item_name + " はカートから削除されました");
+			total = (int)session.getAttribute("total");
 		}
-
-		HttpSession session = request.getSession();
-		Map<String, List<Object>> cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
-
-		if (cartItems != null) { // 例外エラー対策 // ←？？
-			cartItems.remove(item_id);
-			System.out.println(item_id + "をカートから削除した");
 		}
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
