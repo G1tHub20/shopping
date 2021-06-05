@@ -25,6 +25,8 @@ public class ItemBean {
 		this.quantity = quantity;
 	}
 
+
+
 	public ItemBean(String item_id, String name) {
 		this.item_id = item_id;
 		this.name = name;
@@ -34,6 +36,13 @@ public class ItemBean {
 		this.item_id = item_id;
 		this.quantity = quantity;
 	}
+
+	public ItemBean(int price, int quantity, String item_id) { // 引数の重複を避けるため…
+		this.price = price;
+		this.quantity = quantity;
+		this.item_id = item_id;
+	}
+
 	public ItemBean(String item_id, int quantity, int user_id) {
 		this.item_id = item_id;
 		this.quantity = quantity;

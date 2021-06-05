@@ -24,11 +24,13 @@ public class BuyItemServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		System.out.println("--------------------ShoppingServlet(GET)--------------------");
+
+
 		String action = request.getParameter("action");
 		RequestDispatcher dispatcher = null;
 
 		// ■注文履歴
-		System.out.println("jspからShoppingServletに遷移");
 		if (action != null && action.equals("history")) {
 			System.out.println("action='" + action + "'");
 
@@ -42,15 +44,18 @@ public class BuyItemServlet extends HttpServlet {
 			session.setAttribute("historyList", historyList);
 
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/history.jsp");
+    		System.out.println("▼▼「注文履歴」ページ");
 
 		} else if (action != null && action.equals("itemList")) {
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
+    		System.out.println("▼▼「商品リスト」ページ");
 		}
 		dispatcher.forward(request, response);
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("--------------------ShoppingServlet(POST)--------------------");
 
 		HttpSession session = request.getSession();
 
@@ -77,34 +82,22 @@ public class BuyItemServlet extends HttpServlet {
 
 		}
 
-//		String item_id = "tie0002";
-//		int purchaseNum = 1;
-
-		//■itemSearchインスタンの生成
-//		ItemBean itemBuy = new ItemBean(item_id, purchaseNum);
-
-//		HttpSession session = request.getSession();
-//		session.setAttribute("itemSearch", itemSearch);
-
-		// 注文を反映
-//		BuyItemLogic buyItemLogic = new BuyItemLogic();
-//		boolean isBuy = buyItemLogic.execute(itemBuy);
-
 		RequestDispatcher dispatcher;
 
 		if (isBuy == false) {
 			System.out.println("申し訳ありません。注文できません。");
-			request.setAttribute("errorMsg", "申し訳ありません。注文できませんでした。");
+			request.setAttribute("cartMsg", "申し訳ありません。注文できませんでした。");
 
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
+			System.out.println("▼▼「カート」ページ");
 
 		} else {
 
-    	System.out.println("セッションオブジェクト（cartItems）の削除");
-    	session.removeAttribute("cartItems");
+	    	System.out.println("セッションオブジェクト（cartItems）の削除");
+	    	session.removeAttribute("cartItems");
 
-//		session.setAttribute("itemList", itemList);
-		dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
+			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
+			System.out.println("▼▼「注文完了」ページ");
 		}
 
 		dispatcher.forward(request, response);

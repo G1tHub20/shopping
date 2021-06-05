@@ -18,20 +18,21 @@ public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		System.out.println("--------------------RegisterServlet(GET)--------------------");
 		request.removeAttribute("errorMsg"); //初期化?
 
+		System.out.println("▼▼「アカウント登録」ページ");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/register.jsp");
 		dispatcher.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("--------------------RegisterServlet(POST)--------------------");
 		//■リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
 		String userName = request.getParameter("userName");
 		String pass = request.getParameter("pass");
 
-		System.out.println("▼▼「アカウント登録」ページ");
 		System.out.println("ユーザー名=" + userName + "、パスワード=" + pass);
 
 		//■Userインスタンの生成
@@ -50,6 +51,7 @@ public class RegisterServlet extends HttpServlet {
 			request.setAttribute("errorMsg", "使用できません。別のユーザー名を入力してください");
 		}
 
+		System.out.println("▼▼「アカウント登録」ページ");
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/register.jsp");
 
 		dispatcher.forward(request, response);

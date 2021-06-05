@@ -23,12 +23,12 @@ public class ShoppingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("--------------------ShoppingServlet(GET)--------------------");
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
 		RequestDispatcher dispatcher = null;
 
 		// ■注文履歴
-		System.out.println("jspからShoppingServletに遷移");
 		if (action != null && action.equals("history")) {
 			System.out.println("action='" + action + "'");
 
@@ -45,14 +45,17 @@ public class ShoppingServlet extends HttpServlet {
 
 		} else if (action != null && action.equals("itemList")) {
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/itemList.jsp");
+			System.out.println("▼▼「商品リスト」ページ");
 		}
 		dispatcher.forward(request, response);
 
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("--------------------ShoppingServlet(POST)--------------------");
 
 		String action = request.getParameter("action");
+
 		if (action != null && action.equals("search")) {
         // 「検索」ボタンが押された場合は検索処理（商品絞り込み）
 

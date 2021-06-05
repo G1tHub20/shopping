@@ -24,57 +24,83 @@ public class CartServlet extends HttpServlet {
 
 		//■リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
-		String item_id = request.getParameter("item_id");
-		String name = request.getParameter("name");
-		int price = Integer.parseInt(request.getParameter("price"));		// getParamterで数値を受け取るときは型変換が必要
-		int quantity = Integer.parseInt(request.getParameter("quantity"));
-		int subtotal = price * quantity;
+		System.out.println("--------------------CartServlet(POST)--------------------");
+		String action = request.getParameter("action");
+		System.out.println("actionの中身= " + action);
 
-		System.out.println("「カートに入れる」ボタンが押された");
-		System.out.println("item_id=" + item_id + "、price=" + price + "、quantity=" + quantity);
-
-		// カート画面に表示させるメッセージ
-		request.setAttribute("cartMsg", name + " " + quantity + "点 が追加されました");
-
-
-//		■HashMap：1つのキー、複数の値(price, quantity、subtotal)
-//		MapのListを作成する
-
-//		Map<String, List<Integer>> cartItems = null;
-		Map<String, List<Object>> cartItems = null;
-//		List<Integer> item1 = null; // ←微妙…
-		List<Object> item1 = null; // ←微妙…
 		HttpSession session = request.getSession();
-//		UserBean loginUser = (UserBean) request.getAttribute("loginUser"); // × request → ○ session
-		UserBean loginUser = (UserBean) session.getAttribute("loginUser");
-
-		int userId = loginUser.getUserId();
+		Map<String, List<Object>> cartItems;
 
 
-		cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+		// ■「削除」ボタンが押された場合
+		if (action != null && action.equals("delete")) {
+			cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+			String item_id = request.getParameter("item_id");
+			String item_name = request.getParameter("item_name");
+	//		int total = 0;
+			int total = (int)session.getAttribute("total");
+
+			System.out.println(item_id + "の削除ボタンが押された");
+
+			if (cartItems != null) { // 例外エラー対策 // ←？？
+				int subtotal = (int)cartItems.get(item_id).get(3);
+				total -= subtotal;
+				session.setAttribute("total", total);
+				cartItems.remove(item_id);
+				request.setAttribute("cartMsg", item_name + " はカートから削除されました");
+				System.out.println(item_id + "をカートから削除した");
+			}
+
+		// ■「カートに入れるボタン」が押された場合
+		} else {
+			System.out.println("「カートに入れる」ボタンが押された");
+			request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
+
+			cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+
+			String item_id = request.getParameter("item_id");
+			String name = request.getParameter("name");
+			int price = Integer.parseInt(request.getParameter("price"));		// getParamterで数値を受け取るときは型変換が必要
+			int quantity = Integer.parseInt(request.getParameter("quantity"));
+			int subtotal = price * quantity;
+
+			System.out.println("item_id=" + item_id + "、price=" + price + "、quantity=" + quantity);
+
+			// カート画面に表示させるメッセージ
+			request.setAttribute("cartMsg", name + " " + quantity + "点 が追加されました");
+
+
+	//		■HashMap：1つのキー、複数の値(price, quantity、subtotal)
+	//		MapのListを作成する
+
+	//		Map<String, List<Integer>> cartItems = null;
+			List<Object> item0 = null; // ←微妙…
+			List<Object> item1 = null; // ←微妙…
+			UserBean loginUser = (UserBean) session.getAttribute("loginUser");
+
+			int userId = loginUser.getUserId();
+
 
 		// cartItemsが存在しない（初めてカートに入れる）とき
 		if (cartItems == null || cartItems.size() == 0) { // サイズチェックは必要？
+			System.out.println("初めてカートに入れる");
 			cartItems = new HashMap<String, List<Object>>();
 
-			item1 = new ArrayList<Object>();
+			item0 = new ArrayList<Object>();
 			System.out.println(item_id + "の情報を" + "item1インスタンスに格納");
-			item1.add(name);//Listの末尾に値を追加
-			item1.add(price);
-			item1.add(quantity);
-			item1.add(subtotal);
-			item1.add(userId);// 改善できないか？各商品にいちいち同じユーザーidを渡している…
+			item0.add(name);//Listの末尾に値を追加
+			item0.add(price);
+			item0.add(quantity);
+			item0.add(subtotal);
+			item0.add(userId);// 改善できないか？各商品にいちいち同じユーザーidを渡している…
 
-			System.out.println(item1 + "（" + item_id + "）を" + "cartItemsに追加");
-			cartItems.put(item_id, item1); //Map型にデータを追加
+			System.out.println(item0 + "（" + item_id + "）を" + "cartItemsに追加");
+			cartItems.put(item_id, item0); //Map型にデータを追加
 
 		} else {
-			cartItems = new HashMap<String, List<Object>>();
-			item1 = null;
+			System.out.println("さらにカートに追加する");
 
 			session = request.getSession();
-	//		cartItems = (Map<String, List<Integer>>) session.getAttribute("cartItems");
-			cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
 			item1 = cartItems.get(item_id);
 
 			if (cartItems.get(item_id) != null) {
@@ -99,6 +125,8 @@ public class CartServlet extends HttpServlet {
 			}
 		}
 
+		}
+
 		// 合計金額を算出
 		int total = 0;
 		for (String key : cartItems.keySet()) {
@@ -111,8 +139,8 @@ public class CartServlet extends HttpServlet {
 
 		// 合計金額totalをセッションパラメータに保存
 		session.setAttribute("total", total);
-		System.out.println("total= " + session.getAttribute("total"));
 		System.out.println("合計金額（total）= " + total);
+
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
 		dispatcher.forward(request, response);
@@ -121,36 +149,11 @@ public class CartServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
+		System.out.println("--------------------CartServlet(GET)--------------------");
+
 		String action = request.getParameter("action");
-		if (action != null && action.equals("delete")) {
-		// 「削除」ボタンが押された場合
-		String item_id = request.getParameter("item_id");
-		String item_name = request.getParameter("item_name");
-//		int total = 0;
-		HttpSession session = request.getSession();
-		int total = (int)session.getAttribute("total");
-
-		System.out.println(item_id + "の削除ボタンが押された");
-
-		Map<String, List<Object>> cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
-
-		if (cartItems != null) { // 例外エラー対策 // ←？？
-
-			System.out.println("cartItemsはnullじゃない");
-
-			int subtotal = (int)cartItems.get(item_id).get(3);
-			total -= subtotal;
-			session.setAttribute("total", total);
-			cartItems.remove(item_id);
-			System.out.println(item_id + "をカートから削除した");
-		}
-
-		// カート画面に表示させるメッセージ
-		if (item_id != null) {
-			request.setAttribute("cartMsg", item_name + " はカートから削除されました");
-			total = (int)session.getAttribute("total");
-		}
-		}
+		System.out.println("actionの中身= " + action);
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
 		dispatcher.forward(request, response);

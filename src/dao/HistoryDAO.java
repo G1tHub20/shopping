@@ -22,13 +22,12 @@ public class HistoryDAO {
 
 	// ◆全レコードを取得するメソッド
 	public List<HistoryBean> getHistory(UserBean loginUser) {
+		System.out.println("...................HistoryDAO(getHistory)...................");
 		UserBean user = loginUser;
 		List<HistoryBean> historyList = new ArrayList<>();
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			System.out.println("--------------------------------------------------------------------");
-			System.out.println("historyDAO(getHistory)");
 
 //			String sql = "SELECT order_id, purchase_date, user_id, item_id, purchase_num FROM history WHERE user_id = ? ";
 //			PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -73,12 +72,12 @@ public class HistoryDAO {
 			e.printStackTrace();
 			System.out.println("DB接続しっぱい");
 		}
-		System.out.println("--------------------------------------------------------------------");
 		return historyList;
 	}
 
 	// ◆レコードを更新するメソッド
 	public boolean updateHistory(ItemBean itemBuy) {
+		System.out.println("...................HistoryDAO(updateHistory)...................");
 
 		// java.sql.Dateとクラス名が被りimportできないため、完全限定クラス名
 		java.util.Date today = new java.util.Date();
@@ -96,7 +95,6 @@ public class HistoryDAO {
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			System.out.println("--------------------------------------------------------------------");
 			System.out.println("historyDAO(updateHistory)");
 
 			String sql = "INSERT INTO history(purchase_date, user_id, item_id, purchase_num)\r\n"
@@ -122,7 +120,6 @@ public class HistoryDAO {
 			e.printStackTrace();
 			System.out.println("DB接続しっぱい");
 		}
-		System.out.println("--------------------------------------------------------------------");
 		System.out.println("historyテーブルにも反映");
 		return true;
 	}

@@ -26,19 +26,29 @@
 
 
 <h2>商品リストの変更</h2>
-<form method="POST" action="" name="edit" id="adminForm">
+<form action="/shopping/AdminServlet" method="post">
     <table>
-        <tr></tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
+        <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
         <tr>
-        <td><input type="text" value="wat0001" disabled></td>
-        <td><select name="category" disabled>
-            <option value="watch">シンプルアナログ時計</option>
-            <option value="tie">ストライプネクタイ</option>
-            <option value="wallet">ブラウン長財布</option>
+        <td><select name="item_id">
+            <option value="tie0001">tie0001</option>
+            <option value="tie0002">tie0002</option>
+            <option value="wal0001">wal0001</option>
+            <option value="wal0002">wal0002</option>
+            <option value="wat0001">wat0001</option>
+            <option value="wat0002">wat0002</option>
         </select></td>
-        <td><span>¥</span><input type="text" value="90000"></td>
-        <td><input type="number" value="3"></td>
-        <td><button type="submit" id="edit">確定する</button></td>
+        <td><select name="">
+            <option value="tie0001" selected>ストライプネクタイ</option>
+            <option value="tie0002">ワンカラーネクタイ</option>
+            <option value="wal0001">ブラウン長財布</option>
+            <option value="wal0002">プレミアム長財布</option>
+            <option value="wat0001">シンプルアナログ時計</option>
+            <option value="wat0002">スクウェアウォッチ</option>
+        </select></td>
+        <td><span>¥</span><input type="text" name="price" value="90000"></td>
+        <td><input type="number" name="quantity" min="0" max="20" value="3"></td>
+        <td><button type="submit" id="edit">変更する</button></td>
     </tr>
     </table>
 </form>
@@ -51,12 +61,17 @@
 <c:forEach var="item" items="${itemList}" >
 	<tr><td colspan="3"><img src="img/${item.item_id}.jpg" width="200" height="200"></td></tr>
     <tr>
-        <form>
-        <td>${item.item_id}</td>
-        <td>${item.name}</td>
-        <td><span>¥</span>${item.price}</td>
-	    <td>${item.quantity}<td>
-	    <button type="submit">変更する</button></td>
+        <form action="/shopping/AdminServlet" method="post">
+
+	        <td>${item.item_id}</td>
+	        <td>${item.name}</td>
+	        <td><span>¥</span>${item.price}</td>
+		    <td>${item.quantity}<td>
+		    <input type="hidden" name="item_id" value="${item.item_id}">
+		    <input type="hidden" name="name" value="${item.name}">
+		    <input type="hidden" name="price" value="${item.price}">
+		    <input type="hidden" name="quantity" value="${item.quantity}">
+		    <button type="submit" name="alter" value="${item.item_id}">変更する</button></td>
         </form>
     </tr>
 </c:forEach>

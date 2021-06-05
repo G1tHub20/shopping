@@ -17,7 +17,7 @@
     <tr><th>商品名</th><th>価格</th><th>数量</th><th>小計</th><th>ボタン</th></tr>
 
     <c:forEach var="item" items="${cartItems}">
-    	<form action="/shopping/CartServlet?action=delete" method="get">
+    	<form action="/shopping/CartServlet?action=delete" method="post">
     	<tr>
         <td>${item.value[0]}</td>
         <td>${item.value[1]}</td>

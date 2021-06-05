@@ -15,21 +15,21 @@ public class UserDAO {
 
 	// ◆userテーブルからレコードを取得するメソッド
 	public UserBean findUser(UserBean inputUser) {
+		System.out.println("...................UserDAO(findUser)...................");
+
 		UserBean user = inputUser;
 
 		UserBean loginUser = new UserBean();
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			System.out.println("--------------------------------------------------------------------");
-			System.out.println("userDAO(findUser)");
 
 			String sql = "SELECT id, user_name, pass FROM user WHERE user_name = ?  AND pass = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, user.getUserName());
 			pStmt.setString(2, user.getPass());
 
-			System.out.println("ユーザー情報を検索");
+			System.out.println("一致するユーザー情報を検索");
 			System.out.println("SELECT id, user_name, pass FROM user WHERE user_name = \"" + user.getUserName() + "\" AND pass = \"" + user.getPass() + "\"");
 
 			// SQL文を実行
@@ -40,7 +40,7 @@ public class UserDAO {
 				String registeredPass = rs.getString("pass");
 				String registeredUserName = rs.getString("user_name");
 
-				System.out.println("一致するユーザー情報を取得し、\r\nloginUserインスタンスを生成");
+				System.out.println("取得したユーザー情報からloginUserインスタンスを生成");
 				System.out.println("id=" + userId + "、user_name=" + registeredUserName + "、pass=" + registeredPass);
 				loginUser = new UserBean(userId, registeredUserName, registeredPass);
 			}
@@ -50,18 +50,16 @@ public class UserDAO {
 			System.out.println("DB接続しっぱい");
 //			return null;
 		}
-		System.out.println("--------------------------------------------------------------------");
 		return loginUser;
 	}
 
 	// ◆userテーブルにアカウントを新規登録するメソッド
 	public boolean registerUser(UserBean inputUser) {
+		System.out.println("...................UserDAO(registerUser)...................");
+
 		UserBean user = inputUser;
-		Boolean isSuccess = false;
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			System.out.println("--------------------------------------------------------------------");
-			System.out.println("userDAO(registerUser)");
 
 			String sql = "INSERT INTO user(user_name, pass) VALUES(?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
@@ -73,8 +71,8 @@ public class UserDAO {
 
 			// SQL文を実行
 			int result = pStmt.executeUpdate(); //resultには追加された行数(「1」になるはず)が入る
-			if (result == 1) {
-				isSuccess = true;
+			if (result != 1) {
+				return false;
 			}
 
 		} catch (SQLException e) {
@@ -83,7 +81,7 @@ public class UserDAO {
 		}
 
 		System.out.println("登録完了");
-		return isSuccess;
+		return true;
 
 	}
 }

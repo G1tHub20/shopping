@@ -5,12 +5,11 @@ import dao.ItemDAO;
 
 public class BuyItemLogic {
 	public boolean execute(ItemBean itemBuy) {
+		System.out.println("\r''''''''''''''''''''BuyItemLogic''''''''''''''''''''");
         // DAOクラスをインスタンス化
 		ItemDAO dao = new ItemDAO();
 		// ■itemテーブルに商品の注文を反映
 		boolean is_updateHistory = dao.buyItem(itemBuy);
-
-
 
 
 		//■historyテーブルに注文履歴を反映
@@ -28,9 +27,10 @@ public class BuyItemLogic {
 
 		} else {
 			System.out.println("履歴テーブル更新しない");
+			System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''");
 			return false;
 		}
-
+		System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''");
 		return true;
 	}
 }

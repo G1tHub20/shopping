@@ -18,11 +18,13 @@ public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("▼▼「ログイン」ページ");
+		System.out.println("--------------------LoginServlet(POST)--------------------");
 		//■リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
+
 		String userName = request.getParameter("userName");
 		String pass = request.getParameter("pass");
-		System.out.println("▼▼「ログイン」ページ");
 		System.out.println("ユーザー名=" + userName + "、パスワード=" + pass);
 
 		//■Userインスタンの生成
@@ -38,6 +40,7 @@ public class LoginServlet extends HttpServlet {
 		if(loginUser.getUserName() == null) {
 			System.out.println("ログイン失敗");
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/loginFailure.jsp");
+			System.out.println("▼▼「ログイン失敗」ページ");
 			dispatcher.forward(request, response);
 		} else {
 			HttpSession session = request.getSession();
@@ -45,7 +48,6 @@ public class LoginServlet extends HttpServlet {
 			//■ShoppingServletにフォワード
 			dispatcher = request.getRequestDispatcher("/ShoppingServlet");
 			System.out.println("セッションにloginUser情報を保存：" + loginUser.getUserName());
-
 			dispatcher.forward(request, response);
 		}
 
@@ -53,6 +55,7 @@ public class LoginServlet extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("--------------------LoginServlet(GET)--------------------");
 		request.setCharacterEncoding("UTF-8");
 
 		String action = request.getParameter("action");
@@ -69,6 +72,7 @@ public class LoginServlet extends HttpServlet {
         	System.out.println("セッション（itemList・itemSearch・historyList・loginUser）を削除。cartItemsのみ残す");
 
 //			request.setAttribute("errorMsg", "ログアウトしました"); //リダイレクトではリクエストスコープの引継ぎ不可
+    		System.out.println("▼▼「ログイン」ページ");
             response.sendRedirect("./");
         }
 	}
