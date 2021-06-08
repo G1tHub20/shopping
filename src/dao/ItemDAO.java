@@ -196,4 +196,42 @@ public class ItemDAO {
 		return true;
 	}
 
+	// ◆新商品を追加するメソッド
+	public boolean newItemInfo(ItemBean itemChange) {
+		System.out.println("...................ItemDAO(newItemInfo)...................");
+
+		String item_id = itemChange.getItem_id();
+		String name = itemChange.getName();
+		int price = itemChange.getPrice();
+		int quantity = itemChange.getQuantity();
+
+		// DB接続
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+//			String sql = "INSERT INTO item(id, name, price, quantity) VALUES('tie0003', '白ネクタイ', 12000, 3)";
+			String sql = "INSERT INTO item(id, name, price, quantity) VALUES(?, ?, ?, ?)";
+			PreparedStatement pStmt = conn.prepareStatement(sql);
+
+			pStmt.setString(1, item_id);
+			pStmt.setString(2, name);
+			pStmt.setInt(3, price);
+			pStmt.setInt(4, quantity);
+
+			System.out.println("INSERT INTO item(id, name, price, quantity) VALUES(" + item_id + "," + name + "," + price + "," + quantity);
+			int result = pStmt.executeUpdate(); //resultには追加された行数(「1」になるはず)が入る
+
+			// 変更しっぱい…
+			if (result != 1) {
+				return false;
+			}
+
+			System.out.println(item_id + "新商品を追加した！");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB接続しっぱい");
+		}
+		return true;
+	}
+
+
 }

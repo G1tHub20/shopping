@@ -21,6 +21,8 @@ public class AdminServlet extends HttpServlet {
 		//■リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
 
+
+
 		String item_id = request.getParameter("item_id");
 //		String name = (String) request.getParameter("name");
 		int price = Integer.parseInt(request.getParameter("price"));

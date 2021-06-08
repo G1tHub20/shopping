@@ -26,32 +26,68 @@
 
 
 <h2>商品リストの変更</h2>
-<form action="/shopping/AdminServlet" method="post">
+<%--
+<form action="/shopping/AdminServlet?action=new" method="post">
     <table>
         <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
         <tr>
-        <td><select name="item_id">
-            <option value="tie0001">tie0001</option>
-            <option value="tie0002">tie0002</option>
-            <option value="wal0001">wal0001</option>
-            <option value="wal0002">wal0002</option>
-            <option value="wat0001">wat0001</option>
-            <option value="wat0002">wat0002</option>
-        </select></td>
-        <td><select name="">
-            <option value="tie0001" selected>ストライプネクタイ</option>
-            <option value="tie0002">ワンカラーネクタイ</option>
-            <option value="wal0001">ブラウン長財布</option>
-            <option value="wal0002">プレミアム長財布</option>
-            <option value="wat0001">シンプルアナログ時計</option>
-            <option value="wat0002">スクウェアウォッチ</option>
-        </select></td>
-        <td><span>¥</span><input type="text" name="price" value="90000"></td>
-        <td><input type="number" name="quantity" min="0" max="20" value="3"></td>
-        <td><button type="submit" id="edit">変更する</button></td>
+        <td><input type="text" name="item_id" value="tie0003" required></td>
+        <td><input type="text" name="item_name" value="白ネクタイ" required></td>
+        <td><span>¥</span><input type="text" name="price" min="100" max="50000" value=12000 required></td>
+        <td><input type="number" name="quantity" min="0" max="50" value=4 required></td>
+        <td><button type="submit" id="new" onclick='return confirm("商品を新規追加します。よろしいですか？")'>追加する</button></td>
+</td>
     </tr>
     </table>
 </form>
+
+<form action="/shopping/AdminServlet?action=change" method="post">
+    <table>
+        <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
+        <tr>
+        <td><input type="text" name="item_id" value="tie0001" required></td>
+        <td><input type="text" name="item_name" value="ストライプネクタイ" required></td>
+        <td><span>¥</span><input type="text" name="price" min="100" max="50000" value=3000 required></td>
+        <td><input type="number" name="quantity" min="0" max="50" value=3 required></td>
+        <td><button type="submit" id="change" onclick='return confirm("商品情報を変更します。よろしいですか？")'>変更する</button></td>
+    </tr>
+    </table>
+</form>
+
+--%>
+
+<%
+String name = "new";
+String item_id = "";
+String item_name = "";
+int price = 0;
+int quantity = 0;
+String action = "new";
+String button = "<button type='submit' id='new' onclick='return confirm('商品を新規追加します。よろしいですか？')'>追加する</button>";
+
+if (name.equals("change")) {
+    item_id = "tie0001";
+    item_name = "ストライプネクタイ";
+    price = 3000;
+    quantity = 3;
+    action = "change";
+    button = "<button type='submit' id='change' onclick='return confirm('商品情報を変更します。よろしいですか？'')'>変更する</button>";
+}
+%>
+
+<form action="/shopping/AdminServlet?action=<%= action %>" method="post">
+    <table>
+        <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
+        <tr>
+        <td><input type="text" name="item_id" value="<%= item_id %>" required></td>
+        <td><input type="text" name="item_name" value="<%= item_name %>" required></td>
+        <td><span>¥</span><input type="text" name="price" min="100" max="50000" value=<%= price %> required></td>
+        <td><input type="number" name="quantity" min="0" max="50" value=<%= quantity %> required></td>
+		<td><%= button %></td>
+    </tr>
+    </table>
+</form>
+
 
 <br>
 
@@ -71,7 +107,7 @@
 		    <input type="hidden" name="name" value="${item.name}">
 		    <input type="hidden" name="price" value="${item.price}">
 		    <input type="hidden" name="quantity" value="${item.quantity}">
-		    <button type="submit" name="alter" value="${item.item_id}">変更する</button></td>
+		    <button type="submit" name="change" value="${item.item_id}">変更する</button></td>
         </form>
     </tr>
 </c:forEach>
