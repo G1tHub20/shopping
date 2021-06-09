@@ -98,8 +98,10 @@ public class ShoppingServlet extends HttpServlet {
 		// ■管理者の場合
 		if(loginUser.getUserName().equals("admin") && loginUser.getPass().equals("adminpassword")) {
 			System.out.println("管理者としてログイン");
-			System.out.println("▼▼「管理者画面」ページ");
 
+			request.setAttribute("name", "new");
+
+			System.out.println("▼▼「管理者画面」ページ");
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin.jsp");
 
 		} else {
