@@ -170,6 +170,8 @@ public class ItemDAO {
 		int quantity = itemChange.getQuantity();
 		String item_id = itemChange.getItem_id();
 
+		System.out.println("item_id=" + item_id);
+
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 			String sql = "UPDATE item SET price = ?, quantity = ? WHERE id = ?";
@@ -179,7 +181,7 @@ public class ItemDAO {
 			pStmt.setInt(2, quantity);
 			pStmt.setString(3, item_id);
 
-			System.out.println("UPDATE item SET price = \"" + price + ", quantity = \\" + quantity + "WHERE id = \"" + item_id + "\"");
+			System.out.println("UPDATE item SET price = \"" + price + "\", quantity = \"" + quantity + "\", WHERE id = \"" + item_id + "\"");
 			int result = pStmt.executeUpdate(); //resultには追加された行数(「1」になるはず)が入る
 
 			// 変更しっぱい…
@@ -197,17 +199,16 @@ public class ItemDAO {
 	}
 
 	// ◆新商品を追加するメソッド
-	public boolean newItemInfo(ItemBean itemChange) {
+	public boolean newItemInfo(ItemBean itemNew) {
 		System.out.println("...................ItemDAO(newItemInfo)...................");
 
-		String item_id = itemChange.getItem_id();
-		String name = itemChange.getName();
-		int price = itemChange.getPrice();
-		int quantity = itemChange.getQuantity();
+		String item_id = itemNew.getItem_id();
+		String name = itemNew.getName();
+		int price = itemNew.getPrice();
+		int quantity = itemNew.getQuantity();
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-//			String sql = "INSERT INTO item(id, name, price, quantity) VALUES('tie0003', '白ネクタイ', 12000, 3)";
 			String sql = "INSERT INTO item(id, name, price, quantity) VALUES(?, ?, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 

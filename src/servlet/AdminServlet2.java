@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import model.AdminLogic;
+import model.GetItemListLogic;
+import model.ItemBean;
 
 @WebServlet("/AdminServlet2") //URLパターンの設定
 public class AdminServlet2 extends HttpServlet {
@@ -20,41 +26,69 @@ public class AdminServlet2 extends HttpServlet {
 
 		String action = request.getParameter("action");
 		String item_id = request.getParameter("item_id");
+		String item_id2 = request.getParameter("item_id2");
 		String item_name = request.getParameter("item_name");
+		String item_name2 = request.getParameter("item_name2");
 		int price = Integer.parseInt(request.getParameter("price"));
 		int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-
 		if (action != null && action.equals("new")) {
-			System.out.println("フォームの「追加する」ボタンが押された");
+			System.out.println("「追加する」フォームの追加処理");
 
-			System.out.println("ここに新商品追加の処理を入れる");
-			// itemテーブルから取得。変更があるならupdate
-//			System.out.println("とりあえず商品情報を変更");
+			ItemBean newItem = new ItemBean(item_id, item_name, price, quantity);
 
-			//■商品情報変更処理
-//			AdminLogic adminLogic = new AdminLogic();
-//			Boolean isSuccess = adminLogic.execute(itemChange);
+			AdminLogic adminLogic = new AdminLogic();
+			boolean isSuccess = adminLogic.execute1(newItem);
+			System.out.println("追加処理成功！");
 
+			request.setAttribute("name", "new");
+			request.setAttribute("itemChange", newItem);
 
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin.jsp");
-			dispatcher.forward(request, response);
+			if (isSuccess == false) {
+				System.out.println("処理失敗");
+				request.setAttribute("adminMsg", "申し訳ありません。追加できませんでした。");
+
+			} else {
+		    	System.out.println("処理成功");
+				request.setAttribute("adminMsg", "追加しました。");
+
+			}
 
 		} else if (action != null && action.equals("change")) {
-			System.out.println("フォームの「追加する」ボタンが押された");
+			System.out.println("「変更する」フォームの追加処理");
 
-			System.out.println("ここに商品情報変更の処理を入れる");
+			ItemBean changeItem = new ItemBean(item_id2, item_name2, price, quantity);
+
 			// itemテーブルから取得。変更があるならupdate
 //			System.out.println("とりあえず商品情報を変更");
 
 			//■商品情報変更処理
-//			AdminLogic adminLogic = new AdminLogic();
-//			Boolean isSuccess = adminLogic.execute(itemChange);
+			AdminLogic adminLogic = new AdminLogic();
+			Boolean isSuccess = adminLogic.execute2(changeItem);
 
+			request.setAttribute("name", "change");
+			request.setAttribute("itemChange", changeItem);
 
+			if (isSuccess == false) {
+				System.out.println("処理失敗");
+				request.setAttribute("adminMsg", "申し訳ありません。変更できませんでした。");
+
+			} else {
+		    	System.out.println("処理成功");
+				request.setAttribute("adminMsg", "変更しました。");
+			}
+
+		}
+
+		// 追加・変更後の商品リストを取得
+			GetItemListLogic getItemListLogic = new GetItemListLogic();
+			List<ItemBean> itemList = getItemListLogic.execute();
+			HttpSession session = request.getSession();
+			session.setAttribute("itemList", itemList);
+
+			System.out.println("▼▼「管理者」ページ");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin.jsp");
 			dispatcher.forward(request, response);
 	}
 
-}
 }

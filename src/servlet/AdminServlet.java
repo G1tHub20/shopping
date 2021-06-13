@@ -17,6 +17,7 @@ public class AdminServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("--------------------AdminServlet(POST)--------------------");
+		System.out.println("フォームの切替用");
 		//■リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
 
