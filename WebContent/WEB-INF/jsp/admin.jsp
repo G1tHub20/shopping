@@ -14,7 +14,7 @@
 <body>
 <h1>管理者画面</h1>
 
-<h2>商品情報の変更</h2>
+<h2>商品の追加／変更</h2>
 
 
 <%
@@ -28,7 +28,7 @@ String action = "new";
 String disabled = "";
 String placeholder1 = "tie0003";
 String placeholder2 = "白ネクタイ";
-String confirmButton = "<button type='submit' onclick='return confirm('商品を新規追加します。よろしいですか？')'>追加する</button>";
+String confirmButton = "<button type='submit' onclick='return confirm(\'商品を新規追加します。よろしいですか？\')'>追加する</button>";
 String backButton = "";
 
 if (name.equals("change")) {
@@ -50,12 +50,12 @@ if (name.equals("change")) {
     <table>
         <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
         <tr>
-        <td><input type="text" name="item_id" value="<%= item_id %>" placeholder="<%= placeholder1 %>" <%= disabled %> required>
+        <td><input type="text" pattern="^([a-z]{3})([0-9]{4})$" title="英字3桁+数字4桁 ※半角、小文字のみ" name="item_id" value="<%= item_id %>" placeholder="<%= placeholder1 %>" <%= disabled %> required>
         <input type="hidden" name="item_id2" value="<%= item_id %>"></td>
         <td><input type="text" name="item_name" value="<%= item_name %>" placeholder="<%= placeholder2 %>" <%= disabled %> required>
         <input type="hidden" name="item_name2" value="<%= item_name %>"></td>
-        <td><span>¥</span><input type="text" name="price" min="100" max="50000" value=<%= price %> required></td>
-        <td><input type="number" name="quantity" min="0" max="50" value=<%= quantity %> required></td>
+        <td><span>¥</span><input type="number" name="price" min="100" max="50000" step="100" value="<%= price %>" required></td>
+        <td><input type="number" name="quantity" min="1" max="50" value="<%= quantity %>" required></td>
 		<td><%= confirmButton %></td>
     </tr>
     </table>

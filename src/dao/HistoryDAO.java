@@ -38,7 +38,7 @@ public class HistoryDAO {
 			String sql = "SELECT order_id, user_id, purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num\r\n"
 					+ "FROM history JOIN item\r\n"
 					+ "ON history.item_id = item.id\r\n"
-					+ "WHERE user_id = ?\r\n";
+					+ "WHERE user_id = ?\r\n ORDER BY order_id ASC";
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, user.getUserId());
@@ -47,7 +47,7 @@ public class HistoryDAO {
 			ResultSet rs = pStmt.executeQuery();
 
 			System.out.println("SELECT order_id, user_id, purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num FROM history JOIN item\r\n"
-					+ "ON history.item_id = item.id WHERE user_id = \"3\";");
+					+ "ON history.item_id = item.id WHERE user_id = \"3\" ORDER BY order_id ASC;");
 
 			while (rs.next()) {
 

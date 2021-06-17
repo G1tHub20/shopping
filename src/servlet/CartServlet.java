@@ -2,7 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +29,9 @@ public class CartServlet extends HttpServlet {
 		System.out.println("actionの中身= " + action);
 
 		HttpSession session = request.getSession();
-		Map<String, List<Object>> cartItems;
+
+		// LinkedHashMapは挿入された順番を保持する
+		Map<String, List<Object>> cartItems = new LinkedHashMap<String, List<Object>>();
 
 
 		// ■「削除」ボタンが押された場合
@@ -84,7 +86,8 @@ public class CartServlet extends HttpServlet {
 		// cartItemsが存在しない（初めてカートに入れる）とき
 		if (cartItems == null || cartItems.size() == 0) { // サイズチェックは必要？
 			System.out.println("初めてカートに入れる");
-			cartItems = new HashMap<String, List<Object>>();
+//			cartItems = new HashMap<String, List<Object>>();
+			cartItems = new LinkedHashMap<String, List<Object>>();
 
 			item0 = new ArrayList<Object>();
 			System.out.println(item_id + "の情報を" + "item1インスタンスに格納");

@@ -111,17 +111,17 @@ public class ItemDAO {
 			int purchaseNum = itemBuy.getQuantity();
 			String item_id = itemBuy.getItem_id();
 
-			String sql1 = "SELECT quantity FROM item where id = ?";
+			String sql0 = "SELECT quantity FROM item where id = ?";
 			System.out.println("SELECT quantity FROM item where id = " + item_id + "\"");
 
-			PreparedStatement pStm1 = conn.prepareStatement(sql1);
-			pStm1.setString(1, item_id);
+			PreparedStatement pStm0 = conn.prepareStatement(sql0);
+			pStm0.setString(1, item_id);
 
-			ResultSet rs1 = pStm1.executeQuery();
+			ResultSet rs0 = pStm0.executeQuery();
 
 			int stock = 0;
-			if(rs1.next()){
-				stock = Integer.parseInt(rs1.getString("quantity"));
+			if(rs0.next()){
+				stock = Integer.parseInt(rs0.getString("quantity"));
 			}
 
 			String sql = "UPDATE item SET\r\n"
@@ -145,6 +145,7 @@ public class ItemDAO {
 				System.out.println("在庫が足りてる！");
 
 				System.out.println("UPDATEを実行");
+				pStmt.executeUpdate();
 				System.out.println("UPDATE item SET quantity = CASE WHEN 0 <= quantity - " + purchaseNum + " THEN quantity - " + purchaseNum + " ELSE quantity END WHERE id = " + item_id + ";");
 
 				System.out.println("注文完了（itemテーブルの在庫更新");
@@ -174,6 +175,25 @@ public class ItemDAO {
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+			String sql0 = "SELECT EXISTS(SELECT * FROM item WHERE id = ? AND price = ? AND quantity= ?) AS item_check";
+			PreparedStatement pStmt0 = conn.prepareStatement(sql0);
+			pStmt0.setString(1, item_id);
+			pStmt0.setInt(2, price);
+			pStmt0.setInt(3, quantity);
+			ResultSet rs = pStmt0.executeQuery();
+
+			String item_check = "0";
+			if(rs.next()){
+				item_check = rs.getString("item_check");
+			}
+
+			// 実行前のレコードチェック
+			if (item_check.equals("1")) {
+				System.out.println("商品情報の値が同じです。変更処理できません…");
+				return false;
+			}
+
 			String sql = "UPDATE item SET price = ?, quantity = ? WHERE id = ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
@@ -209,6 +229,26 @@ public class ItemDAO {
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+			String sql0 = "SELECT EXISTS(SELECT * FROM item WHERE id = ?) AS item_check";
+			PreparedStatement pStmt0 = conn.prepareStatement(sql0);
+			pStmt0.setString(1, item_id);
+			ResultSet rs = pStmt0.executeQuery();
+
+			String item_check = "0";
+			if(rs.next()){
+				item_check = rs.getString("item_check");
+			}
+
+			// 実行前のレコードチェック
+			if (item_check.equals("1")) {
+				System.out.println("同じ商品コードが既に存在します。登録処理できません…");
+				return false;
+			}
+
+			System.out.println("新規商品です。登録処理を行います！");
+
+
 			String sql = "INSERT INTO item(id, name, price, quantity) VALUES(?, ?, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 

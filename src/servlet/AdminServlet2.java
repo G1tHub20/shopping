@@ -39,7 +39,6 @@ public class AdminServlet2 extends HttpServlet {
 
 			AdminLogic adminLogic = new AdminLogic();
 			boolean isSuccess = adminLogic.execute1(newItem);
-			System.out.println("追加処理成功！");
 
 			request.setAttribute("name", "new");
 			request.setAttribute("itemChange", newItem);
@@ -50,7 +49,7 @@ public class AdminServlet2 extends HttpServlet {
 
 			} else {
 		    	System.out.println("処理成功");
-				request.setAttribute("adminMsg", "追加しました。");
+				request.setAttribute("adminMsg", "新しい商品を追加しました。");
 
 			}
 

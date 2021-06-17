@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import model.BuyItemLogic;
 import model.GetHistoryLogic;
+import model.GetItemListLogic;
 import model.HistoryBean;
 import model.ItemBean;
 import model.UserBean;
@@ -99,6 +100,11 @@ public class BuyItemServlet extends HttpServlet {
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
 			System.out.println("▼▼「注文完了」ページ");
 		}
+
+		// 変更後の商品リストを取得
+		GetItemListLogic getItemListLogic = new GetItemListLogic();
+		List<ItemBean> itemList = getItemListLogic.execute();
+		session.setAttribute("itemList", itemList);
 
 		dispatcher.forward(request, response);
 
