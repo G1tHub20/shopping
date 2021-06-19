@@ -28,7 +28,8 @@ String action = "new";
 String disabled = "";
 String placeholder1 = "tie0003";
 String placeholder2 = "白ネクタイ";
-String confirmButton = "<button type='submit' onclick='return confirm(\'商品を新規追加します。よろしいですか？\')'>追加する</button>";
+String confirmButton = "商品を新規追加します。よろしいですか？";
+String str = "追加する";
 String backButton = "";
 
 if (name.equals("change")) {
@@ -40,7 +41,8 @@ if (name.equals("change")) {
     quantity = item.getQuantity();
     action = "change";
     disabled = "disabled";
-    confirmButton = "<button type='submit' onclick='return confirm('商品情報を変更します。よろしいですか？')'>変更する</button>";
+    confirmButton = "商品情報を変更します。よろしいですか？";
+	str = "変更する";
     backButton = "<button type='submit'>戻る</button>";
 
 }
@@ -56,7 +58,7 @@ if (name.equals("change")) {
         <input type="hidden" name="item_name2" value="<%= item_name %>"></td>
         <td><span>¥</span><input type="number" name="price" min="100" max="50000" step="100" value="<%= price %>" required></td>
         <td><input type="number" name="quantity" min="1" max="50" value="<%= quantity %>" required></td>
-		<td><%= confirmButton %></td>
+		<td><button type='submit' onclick="return confirm('<%= confirmButton %>')"><%= str %></button></td>
     </tr>
     </table>
 </form>
