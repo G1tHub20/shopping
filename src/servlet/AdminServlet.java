@@ -34,12 +34,15 @@ public class AdminServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 
 	} else if (action != null && action.equals("change")) {
+			String UPDorDEL = request.getParameter("UPDorDEL");
 			String item_id = request.getParameter("item_id");
 			String item_name = request.getParameter("item_name");
 			int price = Integer.parseInt(request.getParameter("price"));
 			int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-			System.out.println("変更する商品が選択された" + item_id);
+			System.out.println("★UPDorDEL= " + UPDorDEL);
+
+			System.out.println("変更する商品が選択された→" + item_id);
 
 			ItemBean itemChange = new ItemBean(item_id, item_name, price, quantity);
 
@@ -47,8 +50,13 @@ public class AdminServlet extends HttpServlet {
 			System.out.println("itemChangeインスタンスの生成" + item_id + "、" + item_name + "、" + price + "、" + quantity);
 			request.setAttribute("itemChange", itemChange);
 
-			System.out.println("変更フォーム（change）");
-			request.setAttribute("name", "change");
+			if (UPDorDEL.equals("update")) {
+				System.out.println("変更フォーム（update）");
+				request.setAttribute("name", "update"); //★
+			} else if (UPDorDEL.equals("delete")) {
+				System.out.println("変更フォーム（delete）");
+				request.setAttribute("name", "delete"); //★
+			}
 
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/admin.jsp");
 			dispatcher.forward(request, response);

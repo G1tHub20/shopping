@@ -176,6 +176,7 @@ public class ItemDAO {
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
+			// 存在チェック
 			String sql0 = "SELECT EXISTS(SELECT * FROM item WHERE id = ? AND price = ? AND quantity= ?) AS item_check";
 			PreparedStatement pStmt0 = conn.prepareStatement(sql0);
 			pStmt0.setString(1, item_id);
@@ -217,6 +218,36 @@ public class ItemDAO {
 		}
 		return true;
 	}
+
+	// ◆商品情報を変更するメソッド
+		public boolean deleteItemInfo(ItemBean itemChange) {
+			System.out.println("...................ItemDAO(changeItemInfo)...................");
+
+			String item_id = itemChange.getItem_id();
+
+			// DB接続
+			try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+				String sql = "DELETE FROM item WHERE id = ?";
+				PreparedStatement pStmt = conn.prepareStatement(sql);
+				pStmt.setString(1, item_id);
+
+				System.out.println("DELETE FROM item WHERE id = \"" + item_id + "\"");
+				int result = pStmt.executeUpdate(); //resultには削除された行数(「1」になるはず)が入る
+
+				// 変更しっぱい…
+				if (result != 1) {
+					return false;
+				}
+
+				System.out.println(item_id + "の商品情報を削除した！");
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("DB接続しっぱい");
+			}
+			return true;
+		}
 
 	// ◆新商品を追加するメソッド
 	public boolean newItemInfo(ItemBean itemNew) {

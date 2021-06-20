@@ -23,14 +23,17 @@ public class AdminServlet2 extends HttpServlet {
 		System.out.println("--------------------AdminServlet2(POST)--------------------");
 		//■リクエストパラメータの取得
 		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
-
+		// どのフォームで送信されたか
 		String action = request.getParameter("action");
+
 		String item_id = request.getParameter("item_id");
 		String item_id2 = request.getParameter("item_id2");
 		String item_name = request.getParameter("item_name");
 		String item_name2 = request.getParameter("item_name2");
 		int price = Integer.parseInt(request.getParameter("price"));
 		int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+		System.out.println("★action= " + action);
 
 		if (action != null && action.equals("new")) {
 			System.out.println("「追加する」フォームの追加処理");
@@ -49,12 +52,12 @@ public class AdminServlet2 extends HttpServlet {
 
 			} else {
 		    	System.out.println("処理成功");
-				request.setAttribute("adminMsg", "新しい商品を追加しました。");
+				request.setAttribute("adminMsg", item_id2 + "を追加しました。");
 
 			}
 
-		} else if (action != null && action.equals("change")) {
-			System.out.println("「変更する」フォームの追加処理");
+		} else if (action != null && action.equals("update")) {
+			System.out.println("「更新する」フォームの処理");
 
 			ItemBean changeItem = new ItemBean(item_id2, item_name2, price, quantity);
 
@@ -65,16 +68,37 @@ public class AdminServlet2 extends HttpServlet {
 			AdminLogic adminLogic = new AdminLogic();
 			Boolean isSuccess = adminLogic.execute2(changeItem);
 
-			request.setAttribute("name", "change");
+//			request.setAttribute("name", "update");
 			request.setAttribute("itemChange", changeItem);
 
 			if (isSuccess == false) {
 				System.out.println("処理失敗");
-				request.setAttribute("adminMsg", "申し訳ありません。変更できませんでした。");
+				request.setAttribute("adminMsg", "申し訳ありません。更新できませんでした。");
 
 			} else {
 		    	System.out.println("処理成功");
-				request.setAttribute("adminMsg", "変更しました。");
+				request.setAttribute("adminMsg", item_id2 + "を更新しました。");
+			}
+
+		} else if (action != null && action.equals("delete")) {
+			System.out.println("「削除する」フォームの処理");
+
+			ItemBean changeItem = new ItemBean(item_id2, item_name2, price, quantity);
+
+			//■商品情報削除処理
+			AdminLogic adminLogic = new AdminLogic();
+			Boolean isSuccess = adminLogic.execute3(changeItem);
+
+//			request.setAttribute("name", "delete");
+			request.setAttribute("itemChange", changeItem);
+
+			if (isSuccess == false) {
+				System.out.println("処理失敗");
+				request.setAttribute("adminMsg", "申し訳ありません。削除できませんでした。");
+
+			} else {
+		    	System.out.println("処理成功");
+				request.setAttribute("adminMsg", item_id2 + "を削除しました。");
 			}
 
 		}
