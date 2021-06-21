@@ -26,7 +26,6 @@ public class ItemBean {
 	}
 
 
-
 	public ItemBean(String item_id, String name) {
 		this.item_id = item_id;
 		this.name = name;
@@ -43,6 +42,12 @@ public class ItemBean {
 		this.item_id = item_id;
 	}
 
+	public ItemBean(int user_id, String item_id, int price, int quantity) {
+		this.user_id = user_id;
+		this.item_id = item_id;
+		this.price = price;
+		this.quantity = quantity;
+	}
 	public ItemBean(String item_id, int quantity, int user_id) {
 		this.item_id = item_id;
 		this.quantity = quantity;

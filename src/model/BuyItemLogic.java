@@ -9,15 +9,14 @@ public class BuyItemLogic {
         // DAOクラスをインスタンス化
 		ItemDAO dao = new ItemDAO();
 		// ■itemテーブルに商品の注文を反映
-		boolean is_updateHistory = dao.buyItem(itemBuy);
-
+		boolean is_addHistory = dao.buyItem(itemBuy);
 
 		//■historyテーブルに注文履歴を反映
-		if (is_updateHistory) {
+		if (is_addHistory) {
 			HistoryDAO dao2 = new HistoryDAO();
 			// これを取得しないと
 			// javaからではsessionを取得できないので、オブジェクトでもらう必要がある
-			Boolean isBuy = dao2.updateHistory(itemBuy);
+			Boolean isBuy = dao2.addHistory(itemBuy);
 
 			if (isBuy) {
 			System.out.println("履歴テーブル更新完了！");

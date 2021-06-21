@@ -29,7 +29,6 @@ public class HistoryDAO {
 			System.out.println("ユーザーの注文履歴を取得");
 
 			// datetime型に対し、DATE_FORMAT 関数で年月日のみのフォーマットを指定
-//			String sql = "SELECT order_id, user_id, purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num\r\n"
 			String sql = "SELECT order_id, user_id, DATE_FORMAT(purchase_date, '%Y-%m-%d') AS purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num\r\n"
 					+ "FROM history JOIN item\r\n"
 					+ "ON history.item_id = item.id\r\n"
@@ -70,10 +69,10 @@ public class HistoryDAO {
 	}
 
 	// ◆レコードを追加するメソッド
-	public boolean updateHistory(ItemBean itemBuy) {
-		System.out.println("...................HistoryDAO(updateHistory)...................");
+	public boolean addHistory(ItemBean itemBuy) {
+		System.out.println("...................HistoryDAO(addHistory)...................");
 
-		// java.sql.Dateとクラス名が被りimportできないため、完全限定クラス名
+		// java.sql.Dateとクラス名が被りimportできないため、完全限定クラス名を使う
 //		java.util.Date today = new java.util.Date();
 //		System.out.println(today);
 //		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -85,25 +84,39 @@ public class HistoryDAO {
 		int purchaseNum = itemBuy.getQuantity();
 
 
+
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			System.out.println("historyDAO(updateHistory)");
+			System.out.println("historyDAO(addHistory)");
 
-			String sql = "INSERT INTO history(user_id, item_id, purchase_num)\r\n"
-					+ "VALUES(?, ?, ?)";
+			String sql0 = "SELECT price FROM item WHERE id = ?";
+			PreparedStatement pStmt0 = conn.prepareStatement(sql0);
+			pStmt0.setString(1, item_id);
+
+			// SELECTを実行
+			ResultSet rs = pStmt0.executeQuery();
+
+			int item_price = 0;
+
+			while (rs.next()) {
+				item_price = rs.getInt("price");
+			}
+
+			System.out.println("item_price=" + item_price);
+
+			String sql = "INSERT INTO history(user_id, item_id, item_price, purchase_num)\r\n"
+					+ "VALUES(?, ?, ?, ?)";
 
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setInt(1, user_id);
 			pStmt.setString(2, item_id);
-			pStmt.setInt(3, purchaseNum);
+			pStmt.setInt(3, item_price);
+			pStmt.setInt(4, purchaseNum);
+			pStmt.executeUpdate();
 
 			System.out.println("INSERTを実行");
-			System.out.println("INSERT INTO history(user_id, item_id, purchase_num)\r\n"
-					+ "VALUES(" + user_id + "," + item_id + "," + purchaseNum + ")");
-
-			// UPDATEを実行
-			int result = pStmt.executeUpdate(); // 判定が必要
-
+			System.out.println("INSERT INTO history(user_id, item_id, item_price, purchase_num)\r\n"
+					+ "VALUES(" + user_id + "," + item_id + "," + item_price + "," + purchaseNum + ")");
 
 
 		} catch (SQLException e) {
