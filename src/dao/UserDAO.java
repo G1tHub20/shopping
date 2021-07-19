@@ -61,6 +61,23 @@ public class UserDAO {
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
+			String sql0 = "SELECT EXISTS(SELECT * FROM user WHERE user_name = ?) AS user_check";
+			PreparedStatement pStmt0 = conn.prepareStatement(sql0);
+			pStmt0.setString(1, user.getUserName());
+			ResultSet rs = pStmt0.executeQuery();
+
+			String user_check = "0";
+			if(rs.next()){
+				user_check = rs.getString("user_check");
+			}
+
+			// 実行前のレコードチェック
+			if (user_check.equals("1")) {
+				System.out.println("同じユーザーIDが既にあります。登録処理できません…");
+				return false;
+			}
+			System.out.println("登録可能です。登録処理を行います！");
+
 			String sql = "INSERT INTO user(user_name, pass) VALUES(?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			pStmt.setString(1, user.getUserName());
@@ -72,6 +89,7 @@ public class UserDAO {
 			// SQL文を実行
 			int result = pStmt.executeUpdate(); //resultには追加された行数(「1」になるはず)が入る
 			if (result != 1) {
+				System.out.println("登録できませんでした…");
 				return false;
 			}
 

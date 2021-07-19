@@ -111,6 +111,7 @@ public class ItemDAO {
 			int purchaseNum = itemBuy.getQuantity();
 			String item_id = itemBuy.getItem_id();
 
+			// 更新前に在庫数チェック
 			String sql0 = "SELECT quantity FROM item where id = ?";
 			System.out.println("SELECT quantity FROM item where id = " + item_id + "\"");
 
@@ -120,7 +121,7 @@ public class ItemDAO {
 			ResultSet rs0 = pStm0.executeQuery();
 
 			int stock = 0;
-			if(rs0.next()){
+			if (rs0.next()) {
 				stock = Integer.parseInt(rs0.getString("quantity"));
 			}
 
@@ -152,6 +153,7 @@ public class ItemDAO {
 
 			} else {
 				System.out.println("在庫が足りていない…");
+
 				return false;
 			}
 

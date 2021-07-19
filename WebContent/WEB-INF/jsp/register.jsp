@@ -15,12 +15,12 @@
 <h1>アカウント登録</h1>
 </body>
 <form action="/shopping/RegisterServlet" method="post">
-ユーザー名：<input type="text" name="userName" autofocus required><br>
-パスワード：<input type="password" name="pass" required><br>
-<c:if test="${errorMsg!='アカウントを新規登録しました'}">
+ユーザー名：<input type="text" name="userName" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" autofocus required><br>
+パスワード：<input type="password" name="pass" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" required><br>
+<c:if test="${registerMsg!='アカウントを新規登録しました'}">
 	<button type="submit">アカウント登録</button>
 </c:if>
 </form>
-<p>${errorMsg}</p>
+<p>${registerMsg}</p>
 <a href="/shopping">TOPに戻る</a>
 </html>

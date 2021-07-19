@@ -48,7 +48,7 @@ public class AdminServlet2 extends HttpServlet {
 
 			if (isSuccess == false) {
 				System.out.println("処理失敗");
-				request.setAttribute("adminMsg", "申し訳ありません。追加できませんでした。");
+				request.setAttribute("adminMsg", "同じ商品コードが既に存在します。追加できません。");
 
 			} else {
 		    	System.out.println("処理成功");

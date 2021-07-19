@@ -1,6 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList, java.util.LinkedHashMap, java.util.List, java.util.Map"%>
+<%@ page import="model.UserBean, model.ItemBean" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%
+UserBean loginUser = (UserBean) session.getAttribute("loginUser");
+String userName = loginUser.getUserName();
+
+Map<String, List<Object>> cart = (Map<String, List<Object>>) session.getAttribute(userName); %>
+<% System.out.println("カート=" + cart); %>
+
+<% session.setAttribute("cart", cart); %>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -16,7 +28,7 @@
 <table>
     <tr><th>商品名</th><th>価格</th><th>数量</th><th>小計</th><th>ボタン</th></tr>
 
-    <c:forEach var="item" items="${cartItems}">
+    <c:forEach var="item" items="${cart}">
     	<form action="/shopping/CartServlet?action=delete" method="post">
     	<tr>
         <td>${item.value[0]}</td>
@@ -34,7 +46,7 @@
 
 <form action="/shopping/BuyItemServlet" method="post">
 <c:choose>
-	<c:when test="${not empty cartItems}">
+	<c:when test="${not empty cart}">
 		<p><span>合計金額：¥</span>${total}</p>
 		<button type="submit" onclick='return confirm("注文を確定します。よろしいですか？")'>注文確定</button>
 		<%-- <button type="submit" disabled>お買い物を続ける</button> --%>

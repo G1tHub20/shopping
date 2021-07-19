@@ -45,10 +45,10 @@ public class RegisterServlet extends HttpServlet {
 
 		if (isSuccess == true) {
 			System.out.println("入力情報でアカウントを新規登録");
-			request.setAttribute("errorMsg", "アカウントを新規登録しました");
+			request.setAttribute("registerMsg", "アカウントを新規登録しました");
 		} else {
 			System.out.println("別のユーザー名を使用してください");
-			request.setAttribute("errorMsg", "使用できません。別のユーザー名を入力してください");
+			request.setAttribute("registerMsg", "登録できません。別のユーザー名を入力してください");
 		}
 
 		System.out.println("▼▼「アカウント登録」ページ");

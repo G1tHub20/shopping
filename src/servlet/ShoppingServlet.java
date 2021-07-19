@@ -54,13 +54,13 @@ public class ShoppingServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("--------------------ShoppingServlet(POST)--------------------");
 
+		//■リクエストパラメータの取得
+		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
 		String action = request.getParameter("action");
 
 		if (action != null && action.equals("search")) {
         // 「検索」ボタンが押された場合は検索処理（商品絞り込み）
 
-		//■リクエストパラメータの取得
-		request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
 		String category = request.getParameter("category");
 		String itemName = request.getParameter("itemName");
 		System.out.println("「検索」ボタンが押された");

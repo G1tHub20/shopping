@@ -58,26 +58,28 @@ public class BuyItemServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("--------------------ShoppingServlet(POST)--------------------");
 
+
 		HttpSession session = request.getSession();
+    	UserBean loginUser = (UserBean)session.getAttribute("loginUser");
+    	String userName = loginUser.getUserName();
 
-		Map<String, List<Object>> cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+		Map<String, List<Object>> cart = (Map<String, List<Object>>) session.getAttribute(userName);
 		// 格納された順に取り出したい
-//		cartItems.get("tie0001")
-
-    	System.out.println("セッションオブジェクト（cartItems）の中身を全て出力");
-		for (Object key : cartItems.keySet()) {
-		    System.out.println(key + " => " + cartItems.get(key));
+    	System.out.println("セッションオブジェクト（cart）の中身を全て出力");
+		for (Object key : cart.keySet()) {
+		    System.out.println(key + " => " + cart.get(key));
 		}
     	boolean isBuy = false;
 
-		for (Object key : cartItems.keySet()) {
+		for (Object key : cart.keySet()) {
 			String item_id = (String) key;
-			int purchaseNum = (int) cartItems.get(key).get(2);
-			int userId = (int) cartItems.get(key).get(4);
+			int purchaseNum = (int) cart.get(key).get(2);
+			int userId = (int) cart.get(key).get(4);
 
 			//■itemSearchインスタンの生成
 			ItemBean itemBuy = new ItemBean(item_id, purchaseNum, userId);
 
+			// itemテーブルで在庫チェック→更新→historyテーブル更新
 			BuyItemLogic buyItemLogic = new BuyItemLogic();
 			isBuy = buyItemLogic.execute(itemBuy);
 
@@ -86,16 +88,16 @@ public class BuyItemServlet extends HttpServlet {
 		RequestDispatcher dispatcher;
 
 		if (isBuy == false) {
-			System.out.println("申し訳ありません。注文できません。");
-			request.setAttribute("cartMsg", "申し訳ありません。注文できませんでした。");
+			System.out.println("在庫数が足りないため、注文できませんでした。");
+			request.setAttribute("cartMsg", "在庫数が足りないため、注文できませんでした。");
 
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
 			System.out.println("▼▼「カート」ページ");
 
 		} else {
 
-	    	System.out.println("セッションオブジェクト（cartItems）の削除");
-	    	session.removeAttribute("cartItems");
+	    	System.out.println("セッションオブジェクト（cart）の削除");
+	    	session.removeAttribute(userName);
 
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
 			System.out.println("▼▼「注文完了」ページ");

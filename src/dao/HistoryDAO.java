@@ -17,7 +17,7 @@ public class HistoryDAO {
 	private final String DB_USER = "root";
 	private final String DB_PASS = "mysqlpa55";
 
-	// ◆全レコードを取得するメソッド
+	// ◆ユーザーごとにレコードを取得するメソッド
 	public List<HistoryBean> getHistory(UserBean loginUser) {
 		System.out.println("...................HistoryDAO(getHistory)...................");
 		UserBean user = loginUser;
@@ -29,8 +29,15 @@ public class HistoryDAO {
 			System.out.println("ユーザーの注文履歴を取得");
 
 			// datetime型に対し、DATE_FORMAT 関数で年月日のみのフォーマットを指定
-			String sql = "SELECT order_id, user_id, DATE_FORMAT(purchase_date, '%Y-%m-%d') AS purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num\r\n"
-					+ "FROM history JOIN item\r\n"
+//			String sql = "SELECT order_id, user_id, DATE_FORMAT(purchase_date, '%Y-%m-%d') AS purchase_date, item_id, name, item_price, item_price * purchase_num AS \"subtotal\", purchase_num\r\n"
+//					+ "FROM history JOIN item\r\n"
+//					+ "ON history.item_id = item.id\r\n"
+//					+ "WHERE user_id = ?\r\n ORDER BY order_id ASC";
+
+			// datetime型に対し、DATE_FORMAT 関数で年月日のみのフォーマットを指定
+			// 外部結合（LEFT JOIN）　←一致しないデータも取得するため
+			String sql = "SELECT order_id, user_id, DATE_FORMAT(purchase_date, '%Y-%m-%d') AS purchase_date, item_id, name, item_price, item_price * purchase_num AS \"subtotal\", purchase_num\r\n"
+					+ "FROM history LEFT JOIN item\r\n"
 					+ "ON history.item_id = item.id\r\n"
 					+ "WHERE user_id = ?\r\n ORDER BY order_id ASC";
 
@@ -40,7 +47,7 @@ public class HistoryDAO {
 			// SQL文を実行
 			ResultSet rs = pStmt.executeQuery();
 
-			System.out.println("SELECT order_id, user_id, DATE_FORMAT(purchase_date, '%Y-%m-%d') AS purchase_date, item_id, name, price, price * purchase_num AS \"subtotal\", purchase_num FROM history JOIN item\r\n"
+			System.out.println("SELECT order_id, user_id, DATE_FORMAT(purchase_date, '%Y-%m-%d') AS purchase_date, item_id, name, item_price, item_price * purchase_num AS \"subtotal\", purchase_num FROM history LFTT JOIN item\r\n"
 					+ "ON history.item_id = item.id WHERE user_id = \"3\" ORDER BY order_id ASC;");
 
 			while (rs.next()) {
@@ -48,7 +55,10 @@ public class HistoryDAO {
 				int orderId = rs.getInt("order_id");
 				String purchaseDate = rs.getString("purchase_date");
 				String name = rs.getString("name");
-				int price = rs.getInt("price");
+				if (name == null) {
+					name = "（販売終了商品）";
+				}
+				int price = rs.getInt("item_price");
 				int subtotal = rs.getInt("subtotal");
 
 				int userId = rs.getInt("user_id");

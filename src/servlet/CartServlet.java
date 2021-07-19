@@ -30,13 +30,15 @@ public class CartServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 
-		// LinkedHashMapは挿入された順番を保持する
-		Map<String, List<Object>> cartItems = new LinkedHashMap<String, List<Object>>();
+		UserBean loginUser = (UserBean) session.getAttribute("loginUser");
+		String userName = loginUser.getUserName(); // ユーザー名をカートのセッション名として使用
 
+		// LinkedHashMapは挿入された順番を保持する
+		Map<String, List<Object>> cart = new LinkedHashMap<String, List<Object>>();
 
 		// ■「削除」ボタンが押された場合
 		if (action != null && action.equals("delete")) {
-			cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+			cart = (Map<String, List<Object>>) session.getAttribute(userName);
 			String item_id = request.getParameter("item_id");
 			String item_name = request.getParameter("item_name");
 	//		int total = 0;
@@ -44,11 +46,11 @@ public class CartServlet extends HttpServlet {
 
 			System.out.println(item_id + "の削除ボタンが押された");
 
-			if (cartItems != null) { // 例外エラー対策 // ←？？
-				int subtotal = (int)cartItems.get(item_id).get(3);
+			if (cart != null) { // 例外エラー対策 // ←？？
+				int subtotal = (int)cart.get(item_id).get(3);
 				total -= subtotal;
 				session.setAttribute("total", total);
-				cartItems.remove(item_id);
+				cart.remove(item_id);
 				request.setAttribute("cartMsg", item_name + " はカートから削除されました");
 				System.out.println(item_id + "をカートから削除した");
 			}
@@ -58,7 +60,7 @@ public class CartServlet extends HttpServlet {
 			System.out.println("「カートに入れる」ボタンが押された");
 			request.setCharacterEncoding("UTF-8"); //リクエストパラメータの文字コードを指定
 
-			cartItems = (Map<String, List<Object>>) session.getAttribute("cartItems");
+			cart = (Map<String, List<Object>>) session.getAttribute(userName);
 
 			String item_id = request.getParameter("item_id");
 			String name = request.getParameter("name");
@@ -75,19 +77,18 @@ public class CartServlet extends HttpServlet {
 	//		■HashMap：1つのキー、複数の値(price, quantity、subtotal)
 	//		MapのListを作成する
 
-	//		Map<String, List<Integer>> cartItems = null;
+	//		Map<String, List<Integer>> cart = null;
 			List<Object> item0 = null; // ←微妙…
 			List<Object> item1 = null; // ←微妙…
-			UserBean loginUser = (UserBean) session.getAttribute("loginUser");
+
 
 			int userId = loginUser.getUserId();
 
-
-		// cartItemsが存在しない（初めてカートに入れる）とき
-		if (cartItems == null || cartItems.size() == 0) { // サイズチェックは必要？
+		// cartが存在しない（初めてカートに入れる）とき
+		if (cart == null || cart.size() == 0) { // サイズチェックは必要？
 			System.out.println("初めてカートに入れる");
-//			cartItems = new HashMap<String, List<Object>>();
-			cartItems = new LinkedHashMap<String, List<Object>>();
+//			cart = new HashMap<String, List<Object>>();
+			cart = new LinkedHashMap<String, List<Object>>();
 
 			item0 = new ArrayList<Object>();
 			System.out.println(item_id + "の情報を" + "item1インスタンスに格納");
@@ -97,20 +98,20 @@ public class CartServlet extends HttpServlet {
 			item0.add(subtotal);
 			item0.add(userId);// 改善できないか？各商品にいちいち同じユーザーidを渡している…
 
-			System.out.println(item0 + "（" + item_id + "）を" + "cartItemsに追加");
-			cartItems.put(item_id, item0); //Map型にデータを追加
+			System.out.println(item0 + "（" + item_id + "）を" + "cartに追加");
+			cart.put(item_id, item0); //Map型にデータを追加
 
 		} else {
 			System.out.println("さらにカートに追加する");
 
 			session = request.getSession();
-			item1 = cartItems.get(item_id);
+			item1 = cart.get(item_id);
 
-			if (cartItems.get(item_id) != null) {
+			if (cart.get(item_id) != null) {
 				// カートに入れた商品の個数を変更するとき
 				item1.set(2, ((int)item1.get(2) + quantity));
 				item1.set(3, ((int)item1.get(3) + subtotal));
-				cartItems.put(item_id, item1);
+				cart.put(item_id, item1);
 			} else {
 				// 別の商品を追加するとき
 //				List<Integer> item2 = new ArrayList<Integer>();
@@ -121,7 +122,7 @@ public class CartServlet extends HttpServlet {
 				subtotal = price * quantity;
 				item2.add(subtotal);
 				item2.add(userId);
-				cartItems.put(item_id, item2);
+				cart.put(item_id, item2);
 
 			//■itemインスタンの生成
 	//		ItemBean item = new ItemBean(item_id, name, price, quantity, subtotal);
@@ -132,13 +133,13 @@ public class CartServlet extends HttpServlet {
 
 		// 合計金額を算出
 		int total = 0;
-		for (String key : cartItems.keySet()) {
-			total += (int)cartItems.get(key).get(3);
+		for (String key : cart.keySet()) {
+			total += (int)cart.get(key).get(3);
 		}
 
-		// cartItemsをセッションに保存
-		System.out.println("cartItemsをセッションに保存");
-		session.setAttribute("cartItems", cartItems);
+		// cartをセッションに保存
+		System.out.println("cartをセッション（" + userName + "）に保存");
+		session.setAttribute(userName, cart); //個別にカートを持たせるため、ユーザー名をセッション名に使用
 
 		// 合計金額totalをセッションパラメータに保存
 		session.setAttribute("total", total);
@@ -146,6 +147,7 @@ public class CartServlet extends HttpServlet {
 
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
+		System.out.println("▼▼「カート」ページ");
 		dispatcher.forward(request, response);
 	}
 

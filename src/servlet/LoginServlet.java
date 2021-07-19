@@ -59,17 +59,24 @@ public class LoginServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 		String action = request.getParameter("action");
-        if (action.equals("logout")) {
+        if (action != null && action.equals("logout")) {
             // 「ログアウト」ボタンが押された場合はログアウト処理（セッションの破棄）
         	HttpSession session = request.getSession();
 //        	session.invalidate(); // セッションの破棄（全インスタンスが消滅）
-        	// cartItemsのみ残す必要がある
+        	// カートのセッションのみ残す必要がある
         	session.removeAttribute("itemList");
         	session.removeAttribute("itemSearch");
         	session.removeAttribute("historyList");
         	session.removeAttribute("loginUser");
         	System.out.println("ログアウト");
-        	System.out.println("セッション（itemList・itemSearch・historyList・loginUser）を削除。cartItemsのみ残す");
+        	System.out.println("セッション（itemList・itemSearch・historyList・loginUser）を削除。カートのセッションのみ残す");
+
+        	session = request.getSession(false);
+            if(session == null){
+            	System.out.println("セッションがNULL");
+            }else{
+            	System.out.println("セッションがある");
+            }
 
 //			request.setAttribute("errorMsg", "ログアウトしました"); //リダイレクトではリクエストスコープの引継ぎ不可
     		System.out.println("▼▼「ログイン」ページ");
