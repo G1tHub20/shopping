@@ -6,6 +6,7 @@ public class ItemBean {
 	private int price;
 	private int quantity;
 	private int subtotal;
+	private String image;
 	private int user_id;
 
 	public ItemBean() {}
@@ -23,6 +24,14 @@ public class ItemBean {
 		this.name = name;
 		this.price = price;
 		this.quantity = quantity;
+	}
+
+	public ItemBean(String item_id, String name, int price, int quantity, String image) {
+		this.item_id = item_id;
+		this.name = name;
+		this.price = price;
+		this.quantity = quantity;
+		this.image = image;
 	}
 
 
@@ -68,6 +77,9 @@ public class ItemBean {
 	}
 	public int getSubtotal() {
 		return subtotal;
+	}
+	public String getImage() {
+		return image;
 	}
 	public int getUser_id() {
 		return user_id;

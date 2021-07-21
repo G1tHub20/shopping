@@ -9,13 +9,14 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 // ■フィルタ…サーブレットを呼び出すときに自動的に先に呼び出されるようなプログラム
 // @WebFilter("/*") //フィルターを設定するサーブレットクラスを指定
 // @WebFilter("/loginServlet") //フィルターを設定するサーブレットクラスを指定
-//@WebFilter(urlPatterns={"/AdminServlet","/AdminServlet2","/BuyItemServlet","/CartServlet","/RegisterServlet","/ShoppingServlet"}) //フィルターを設定するサーブレットクラスを指定
+@WebFilter(urlPatterns={"/AdminServlet","/AdminServlet2","/BuyItemServlet","/CartServlet","/RegisterServlet","/ShoppingServlet"}) //フィルターを設定するサーブレットクラスを指定
 public class LoginCheckFilter implements Filter {
 
 	public void init(FilterConfig fConfig) throws ServletException { } //フィルタがインスタンス化された直後に実行　※1
@@ -30,7 +31,6 @@ public class LoginCheckFilter implements Filter {
 			Object loginCheck = session.getAttribute("loginUser");
 			if (loginCheck == null) {
 				  System.out.println("★loginCheckセッションがNull");
-
 		            RequestDispatcher dispatcher = request.getRequestDispatcher("/LoginServlet");
 		            dispatcher.forward(request, response);
 			} else {

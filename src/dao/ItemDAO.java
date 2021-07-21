@@ -24,7 +24,7 @@ public class ItemDAO {
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			String sql = "SELECT id, name, price, quantity FROM item";
+			String sql = "SELECT id, name, price, quantity, image FROM item";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 			System.out.println("全ての商品情報を取得");
 			System.out.println(sql);
@@ -37,8 +37,9 @@ public class ItemDAO {
 				String itemName = rs.getString("name");
 				int price = rs.getInt("price");
 				int quantity = rs.getInt("quantity");
+				String image = rs.getString("image");
 
-				ItemBean item = new ItemBean(itemId, itemName, price, quantity);
+				ItemBean item = new ItemBean(itemId, itemName, price, quantity, image);
 				itemList.add(item);
 			}
 
@@ -72,7 +73,7 @@ public class ItemDAO {
 
 			System.out.println("searchWord1=" + searchWord1 + "、searchWord2=" + searchWord2);
 
-			String sql = "SELECT id, name, price, quantity FROM item WHERE name LIKE ? \r\n"
+			String sql = "SELECT id, name, price, quantity, image FROM item WHERE name LIKE ? \r\n"
 					+ "AND id LIKE ?";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
@@ -83,14 +84,16 @@ public class ItemDAO {
 			ResultSet rs = pStmt.executeQuery();
 
 			System.out.println("SELECTを実行");
+			System.out.println("SELECT id, name, price, quantity, image FROM item WHERE name LIKE \"%" + searchWord1 + "\"%\" + AND id LIKE" + searchWord2 + "%\"");
 
 			while (rs.next()) {
 				String itemId = rs.getString("id");
 				String itemName = rs.getString("name");
 				int price = rs.getInt("price");
 				int quantity = rs.getInt("quantity");
+				String image = rs.getString("image");
 
-				ItemBean item = new ItemBean(itemId, itemName, price, quantity);
+				ItemBean item = new ItemBean(itemId, itemName, price, quantity, image);
 				itemList.add(item);
 			}
 		} catch (SQLException e) {
@@ -259,6 +262,7 @@ public class ItemDAO {
 		String name = itemNew.getName();
 		int price = itemNew.getPrice();
 		int quantity = itemNew.getQuantity();
+		String image = itemNew.getImage();
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
@@ -282,15 +286,16 @@ public class ItemDAO {
 			System.out.println("新規商品です。登録処理を行います！");
 
 
-			String sql = "INSERT INTO item(id, name, price, quantity) VALUES(?, ?, ?, ?)";
+			String sql = "INSERT INTO item(id, name, price, quantity, image) VALUES(?, ?, ?, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
 
 			pStmt.setString(1, item_id);
 			pStmt.setString(2, name);
 			pStmt.setInt(3, price);
 			pStmt.setInt(4, quantity);
+			pStmt.setString(5, image);
 
-			System.out.println("INSERT INTO item(id, name, price, quantity) VALUES(" + item_id + "," + name + "," + price + "," + quantity);
+			System.out.println("INSERT INTO item(id, name, price, quantity, image) VALUES(" + item_id + "," + name + "," + price + "," + quantity + "," + image + ")");
 			int result = pStmt.executeUpdate(); //resultには追加された行数(「1」になるはず)が入る
 
 			// 変更しっぱい…

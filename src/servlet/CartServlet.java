@@ -124,8 +124,6 @@ public class CartServlet extends HttpServlet {
 				item2.add(userId);
 				cart.put(item_id, item2);
 
-			//■itemインスタンの生成
-	//		ItemBean item = new ItemBean(item_id, name, price, quantity, subtotal);
 			}
 		}
 

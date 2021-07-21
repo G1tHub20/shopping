@@ -1,21 +1,26 @@
 package servlet;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import model.AdminLogic;
 import model.GetItemListLogic;
 import model.ItemBean;
 
 @WebServlet("/AdminServlet2") //URLパターンの設定
+@MultipartConfig // これでファイル以外のパラメータを取得できる？
 public class AdminServlet2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -30,6 +35,7 @@ public class AdminServlet2 extends HttpServlet {
 		String item_id2 = request.getParameter("item_id2");
 		String item_name = request.getParameter("item_name");
 		String item_name2 = request.getParameter("item_name2");
+
 		int price = Integer.parseInt(request.getParameter("price"));
 		int quantity = Integer.parseInt(request.getParameter("quantity"));
 
@@ -38,7 +44,26 @@ public class AdminServlet2 extends HttpServlet {
 		if (action != null && action.equals("new")) {
 			System.out.println("「追加する」フォームの追加処理");
 
-			ItemBean newItem = new ItemBean(item_id, item_name, price, quantity);
+			Part part = request.getPart("image");
+			//ファイル名を取得
+			String filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+
+//			String image[] = filename.split("."); // 正規表現（任意の1文字）になってしまう
+			String image[] = filename.split("\\.");
+
+			System.out.println("filename= " + filename); //
+			System.out.println("image= " + image[0]); //
+
+			//アップロードするフォルダ
+			String path = getServletContext().getRealPath("/upload");
+			//実際にファイルが保存されるパス確認
+			System.out.println("実際にファイルが保存されるパス");
+			System.out.println(path);
+			//書き込み
+			part.write(path + File.separator + filename);
+			request.setAttribute("filename", filename);
+
+			ItemBean newItem = new ItemBean(item_id, item_name, price, quantity, image[0]);
 
 			AdminLogic adminLogic = new AdminLogic();
 			boolean isSuccess = adminLogic.execute1(newItem);
@@ -89,7 +114,6 @@ public class AdminServlet2 extends HttpServlet {
 			AdminLogic adminLogic = new AdminLogic();
 			Boolean isSuccess = adminLogic.execute3(changeItem);
 
-//			request.setAttribute("name", "delete");
 			request.setAttribute("itemChange", changeItem);
 
 			if (isSuccess == false) {

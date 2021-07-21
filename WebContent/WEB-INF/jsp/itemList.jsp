@@ -30,7 +30,7 @@
 
     <tr><th>商品名</th><th>価格</th><th>数量</th><th>ボタン</th></tr>
 <c:forEach var="item" items="${itemList}" >
-	<tr><td colspan="3"><img src="img/${item.item_id}.jpg" width="200" height="200"></td></tr>
+	<tr><td colspan="3"><img src="/shopping/upload/${item.image}.jpg" width="200" height="200"></td></tr>
     <tr>
         <form action="/shopping/CartServlet" method="post">
         <td>${item.name}</td>
