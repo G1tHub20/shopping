@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 public class LoginCheckFilter implements Filter {
 
 	public void init(FilterConfig fConfig) throws ServletException { } //フィルタがインスタンス化された直後に実行　※1
+
 	public void doFilter(ServletRequest request,ServletResponse response, FilterChain chain) //設定したサーブレットクラスをリクエストしたとき
 			throws IOException, ServletException {
 		System.out.println("★ログインチェック");
@@ -27,7 +28,6 @@ public class LoginCheckFilter implements Filter {
 		HttpSession session = ((HttpServletRequest)request).getSession(false);
 		if (session != null) {
 			System.out.println("★何かしらセッションがある");
-
 			Object loginCheck = session.getAttribute("loginUser");
 			if (loginCheck == null) {
 				  System.out.println("★loginCheckセッションがNull");

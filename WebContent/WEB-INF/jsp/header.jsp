@@ -6,8 +6,9 @@
 <header>
 <%-- ログイン後のページでは、「ユーザー名」「注文履歴」「ログアウト」を共通で表示 --%>
 
+<%--
 <script type="text/javascript">
-function check(){
+function check() {
 	if(window.confirm('ログアウトします。よろしいですか？')){ // 確認ダイアログを表示
 		return true; // 「OK」時は実行
 	}
@@ -16,6 +17,7 @@ function check(){
 	}
 }
 </script>
+--%>
 
 	<p>「${loginUser.userName}さん」
 	<c:if test="${loginUser.userName != 'admin'}"><%-- <c:if test="${action != 'history'}"> 文字列の比較だがequalsを使わない --%>
