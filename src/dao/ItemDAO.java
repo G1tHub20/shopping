@@ -101,16 +101,21 @@ public class ItemDAO {
 	return itemList;
 	}
 
-	// ◆注文された商品の在庫数を変更するメソッド
-	public boolean buyItem(ItemBean itemBuy) {
-		System.out.println("...................ItemDAO(buyItem)...................");
+
+	// ◆在庫数をチェックするメソッド
+	public int checkStock(ItemBean itemBuy) {
+		System.out.println("...................checkStock(buyItem)...................");
+
+		int is_check = 0;
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			System.out.println("itemDAO(buyItem)");
+			System.out.println("checkStock(buyItem)");
 
 			int purchaseNum = itemBuy.getQuantity();
 			String item_id = itemBuy.getItem_id();
+			int stock = 0;
+
 
 			// 更新前に在庫数チェック
 			String sql0 = "SELECT quantity FROM item where id = ?";
@@ -121,10 +126,36 @@ public class ItemDAO {
 
 			ResultSet rs0 = pStm0.executeQuery();
 
-			int stock = 0;
-			if (rs0.next()) {
+			while (rs0.next()) {
 				stock = Integer.parseInt(rs0.getString("quantity"));
+				System.out.println("在庫数= " + stock);
+				System.out.println("注文数= " + purchaseNum);
+				if (stock < purchaseNum) {
+					System.out.println("在庫が不足…");
+					is_check++;
+				}
 			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("DB接続しっぱい");
+		}
+
+		return is_check;
+	}
+
+
+	// ◆注文された商品の在庫数を減らすメソッド
+	public boolean buyItem(ItemBean itemBuy) {
+		System.out.println("...................ItemDAO(buyItem)...................");
+
+		// DB接続
+		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+			System.out.println("itemDAO(buyItem)");
+
+			int purchaseNum = itemBuy.getQuantity();
+			String item_id = itemBuy.getItem_id();
+			boolean result = false;
 
 			String sql = "UPDATE item SET\r\n"
 					+ "  quantity =\r\n"
@@ -139,22 +170,8 @@ public class ItemDAO {
 			pStmt.setInt(2, purchaseNum);
 			pStmt.setString(3, item_id);
 
-			System.out.println("在庫数= " + stock);
-			System.out.println("注文数= " + purchaseNum);
-
-
-			if (stock - purchaseNum >= 0) {
-				System.out.println("在庫が足りてる！");
-
-				System.out.println("UPDATEを実行");
-				pStmt.executeUpdate();
-				System.out.println("UPDATE item SET quantity = CASE WHEN 0 <= quantity - " + purchaseNum + " THEN quantity - " + purchaseNum + " ELSE quantity END WHERE id = " + item_id + ";");
-
-				System.out.println("注文完了（itemテーブルの在庫更新");
-
-			} else {
-				System.out.println("在庫が足りていない…");
-
+			int result2 = pStmt.executeUpdate();
+			if (result2 == 0) {
 				return false;
 			}
 

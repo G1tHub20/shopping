@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.ItemDAO;
 import model.BuyItemLogic;
 import model.GetHistoryLogic;
 import model.GetItemListLogic;
@@ -58,57 +59,94 @@ public class BuyItemServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("--------------------ShoppingServlet(POST)--------------------");
 
-
+		RequestDispatcher dispatcher = null;
 		HttpSession session = request.getSession();
     	UserBean loginUser = (UserBean)session.getAttribute("loginUser");
     	String userName = loginUser.getUserName();
+    	int orderResult = 99; // 最終的な注文処理成功の判定（初期値99は失敗）
+    	int counter = 0;
+    	ItemBean itemBuy = null;
+    	boolean isReslut = false;
+
 
 		Map<String, List<Object>> cart = (Map<String, List<Object>>) session.getAttribute(userName);
 		// 格納された順に取り出したい
     	System.out.println("セッションオブジェクト（cart）の中身を全て出力");
-		for (Object key : cart.keySet()) {
-		    System.out.println(key + " => " + cart.get(key));
-		}
-    	boolean isBuy = false;
 
 		for (Object key : cart.keySet()) {
+			System.out.println(key + " => " + cart.get(key));
+
 			String item_id = (String) key;
 			int purchaseNum = (int) cart.get(key).get(2);
 			int userId = (int) cart.get(key).get(4);
 
 			//■itemSearchインスタンの生成
-			ItemBean itemBuy = new ItemBean(item_id, purchaseNum, userId);
+			itemBuy = new ItemBean(item_id, purchaseNum, userId);
 
-			// itemテーブルで在庫チェック→更新→historyテーブル更新
-			BuyItemLogic buyItemLogic = new BuyItemLogic();
-			isBuy = buyItemLogic.execute(itemBuy);
+			boolean is_addHistory = false;
 
+			ItemDAO dao = new ItemDAO();
+
+		    // 在庫判定
+		    int is_check = dao.checkStock(itemBuy);
+		    if (is_check > 0) {
+		    	System.out.println("注文処理失敗（在庫不足）");
+				counter++;
+		    }
 		}
 
-		RequestDispatcher dispatcher;
-
-		if (isBuy == false) {
-			System.out.println("在庫数が足りないため、注文できませんでした。");
-			request.setAttribute("cartMsg", "在庫数が足りないため、注文できませんでした。");
-
-			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
-			System.out.println("▼▼「カート」ページ");
+		if (counter > 0) {
+			System.out.println("①在庫数チェック：NG！");
+			System.out.println("在庫なし。注文処理しっぱい");
+			request.setAttribute("cartMsg", "在庫数が足りないため、注文できません。");
+			orderResult = 1;
 
 		} else {
-
-	    	System.out.println("セッションオブジェクト（cart）の削除");
-	    	session.removeAttribute(userName);
-
-			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
-			System.out.println("▼▼「注文完了」ページ");
+			System.out.println("①在庫数チェック：OK！");
+			System.out.println("在庫あり。注文処理へ");
+			BuyItemLogic buyItemLogic = new BuyItemLogic();
+			isReslut = buyItemLogic.execute(itemBuy);
+			if (isReslut) {
+				System.out.println("②注文履歴テーブルに反映完了");
+				orderResult = 0;
+			} else {
+				System.out.println("②注文履歴テーブル反映しない");
+				orderResult = 9;
+			}
 		}
 
-		// 変更後の商品リストを取得
-		GetItemListLogic getItemListLogic = new GetItemListLogic();
-		List<ItemBean> itemList = getItemListLogic.execute();
-		session.setAttribute("itemList", itemList);
+//		    System.out.println("注文処理失敗（在庫不足）判定後、処理は継続している？");
 
-		dispatcher.forward(request, response);
 
-	}
-}
+
+			    if (orderResult == 0) {
+				    System.out.println("注文処理成功！");
+			    	System.out.println("セッションオブジェクト（cart）の削除");
+			    	session.removeAttribute(userName);
+					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/result.jsp");
+
+					// 変更後の商品リストを取得
+					GetItemListLogic getItemListLogic = new GetItemListLogic();
+					List<ItemBean> itemList = getItemListLogic.execute();
+					session.setAttribute("itemList", itemList);
+					System.out.println("▼▼「注文完了」ページ");
+
+			    } else if (orderResult == 1) {
+			    	System.out.println("注文処理失敗（在庫不足）");
+					request.setAttribute("cartMsg", "在庫数が足りないため、注文できません。");
+					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
+					System.out.println("▼▼「カート」ページ");
+
+
+				} else {
+					System.out.println("注文処理失敗（エラー）");
+					request.setAttribute("cartMsg", "申し訳ありません。注文できませんでした。");
+					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
+					System.out.println("▼▼「カート」ページ");
+
+				}
+
+				dispatcher.forward(request, response);
+		    }
+
+		}
