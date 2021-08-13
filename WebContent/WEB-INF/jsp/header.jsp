@@ -19,10 +19,17 @@ function check() {
 </script>
 --%>
 
+<<<<<<< HEAD
 	<p id="header">「${loginUser.userName}さん」
 	<c:if test="${loginUser.userName != 'Administrator'}"><%-- <c:if test="${action != 'history'}"> 文字列の比較だがequalsを使わない --%>
 	<a href="ShoppingServlet?action=history">注文履歴</a>
 	<a href="CartServlet">ショッピングカート</a>
+=======
+	<p>「${loginUser.userName}さん」
+	<c:if test="${loginUser.userName != 'admin'}"><%-- <c:if test="${action != 'history'}"> 文字列の比較だがequalsを使わない --%>
+	<a href="ShoppingServlet?action=history">注文履歴</a>
+	<a href="CartServlet">カート</a>
+>>>>>>> branch 'master' of https://github.com/G1tHub20/shopping.git
 	</c:if>
 	<a href="LoginServlet?action=logout" onclick="return confirm('ログアウトします。よろしいですか?')">ログアウト</a>
 	</p>

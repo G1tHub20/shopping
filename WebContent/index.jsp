@@ -14,11 +14,18 @@
 <h1>ようこそ</h1>
 </body>
 <form action="/shopping/LoginServlet" method="post">
+<<<<<<< HEAD
 ユーザー名：<input type="text" name="userName" autofocus required><br>
 パスワード：<input type="password" name="pass" required><br>
 <button type="submit">ログイン</button>
 </form>
 <br>
+=======
+ユーザー名：<input type="text" name="userName" value="admin" autofocus required><br>
+パスワード：<input type="password" name="pass" value="adminpassword" required><br>
+<button type="submit">ログイン</button>
+</form>
+>>>>>>> branch 'master' of https://github.com/G1tHub20/shopping.git
 <a href="/shopping/RegisterServlet">アカウント登録</a>
 
 </html>

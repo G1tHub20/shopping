@@ -24,6 +24,7 @@
 <button type="submit">検索</button>
 </form>
 
+<<<<<<< HEAD
 <table id="listtable">
 
 <%-- 商品コード：${item.item_id}、商品名：${item.name}、価格：{item.price}、数量：{item.quantity} --%>
@@ -62,6 +63,42 @@
     <tr><td colspan="5"><hr></td></tr>
 </c:forEach>
 </tbody>
+=======
+<table>
+
+<%-- 商品コード：${item.item_id}、商品名：${item.name}、価格：{item.price}、数量：{item.quantity} --%>
+
+    <tr><th>商品名</th><th>価格</th><th>数量</th><th>ボタン</th></tr>
+<c:forEach var="item" items="${itemList}" >
+	<tr><td colspan="3"><img src="/shopping/upload/${item.image}.jpg" width="200" height="200"></td></tr>
+    <tr>
+        <form action="/shopping/CartServlet" method="post">
+        <td>${item.name}</td>
+        <td><span>¥</span>${item.price}</td>
+        <input type="hidden" name="name" value="${item.name}">
+        <input type="hidden" name="price" value="${item.price}">
+
+        <c:choose>
+
+        <%-- ■在庫切れのチェック --%>
+        <c:when test="${item.quantity > 0}">
+	        <td>
+	        <select name="quantity">
+	        <c:forEach var="i" begin="1" end="${item.quantity}" step="1">
+	        <option value="<c:out value="${i}" />"><c:out value="${i}" /></option>
+	        </c:forEach>
+	        </select>
+	        </td>
+	        <td><button type="submit" name="item_id" value="${item.item_id}">カートに入れる</button></td>
+       </c:when>
+        <c:otherwise>
+			<td colspan="2">現在、在庫切れです！</td>
+	        </c:otherwise>
+        </c:choose>
+        </form>
+    </tr>
+</c:forEach>
+>>>>>>> branch 'master' of https://github.com/G1tHub20/shopping.git
 </table>
 
 </body>

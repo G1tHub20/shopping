@@ -15,10 +15,18 @@
 <h1>アカウント登録</h1>
 </body>
 <form action="/shopping/RegisterServlet" method="post">
+<<<<<<< HEAD
 ユーザー名：<input type="text" name="userName" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" minlength="8" maxlength="20" autofocus required><br>
 パスワード：<input type="password" name="pass" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" minlength="8" maxlength="20" required><br>
 ※半角英数字8～20字（いずれかを1字以上含む）で入力してください<br>
 <button type="submit">アカウント登録</button>
+=======
+ユーザー名：<input type="text" name="userName" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" autofocus required><br>
+パスワード：<input type="password" name="pass" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" required><br>
+<c:if test="${registerMsg!='アカウントを新規登録しました'}">
+	<button type="submit">アカウント登録</button>
+</c:if>
+>>>>>>> branch 'master' of https://github.com/G1tHub20/shopping.git
 </form>
 <p>${registerMsg}</p>
 <a href="/shopping">TOPに戻る</a>
