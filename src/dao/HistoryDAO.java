@@ -39,7 +39,7 @@ public class HistoryDAO {
 		String sql = "SELECT order_id, user_id, purchase_date, item_id, name, item_price, item_price * purchase_num AS \"subtotal\", purchase_num\r\n"
 				+ "FROM history LEFT JOIN item\r\n"
 				+ "ON history.item_id = item.id\r\n"
-				+ "WHERE user_id = ?\r\n ORDER BY order_id ASC";
+				+ "WHERE user_id = ?\r\n ORDER BY order_id DESC";
 
 		PreparedStatement pStmt = conn.prepareStatement(sql);
 		pStmt.setInt(1, user.getUserId());
@@ -48,7 +48,7 @@ public class HistoryDAO {
 		ResultSet rs = pStmt.executeQuery();
 
 		System.out.println("SELECT order_id, user_id, purchase_date, item_id, name, item_price, item_price * purchase_num AS \"subtotal\", purchase_num FROM history LFTT JOIN item\r\n"
-				+ "ON history.item_id = item.id WHERE user_id = \"3\" ORDER BY order_id ASC;");
+				+ "ON history.item_id = item.id WHERE user_id = \"3\" ORDER BY order_id DESC;");
 
 		// 退避エリア
 		String savePurchaseDate = null;
@@ -153,7 +153,6 @@ public class HistoryDAO {
 			e.printStackTrace();
 			System.out.println("DB接続しっぱい");
 		}
-		System.out.println("historyテーブルにも反映");
 		return true;
 	}
 }

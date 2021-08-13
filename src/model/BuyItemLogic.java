@@ -13,8 +13,9 @@ public class BuyItemLogic {
 
 
     if (is_addHistory) {
-      HistoryDAO dao2 = new HistoryDAO();
-      Boolean isBuy = Boolean.valueOf(dao2.addHistory(itemBuy));
+		System.out.println("②商品テーブル更新完了！");
+		HistoryDAO dao2 = new HistoryDAO();
+		Boolean isBuy = Boolean.valueOf(dao2.addHistory(itemBuy));
 
       if (isBuy.booleanValue()) {
     	  System.out.println("③履歴テーブル更新完了！");
@@ -25,6 +26,10 @@ public class BuyItemLogic {
 
       }
 
+    } else {
+    	System.out.println("②商品テーブル更新しっぱい");
+        System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''");
+        return false;
     }
     System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''");
     return true;

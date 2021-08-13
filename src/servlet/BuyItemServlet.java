@@ -67,11 +67,17 @@ public class BuyItemServlet extends HttpServlet {
     	int counter = 0;
     	ItemBean itemBuy = null;
     	boolean isReslut = false;
+	    ItemBean[] itemBuys;
+	    int size;
 
 
 		Map<String, List<Object>> cart = (Map<String, List<Object>>) session.getAttribute(userName);
 		// 格納された順に取り出したい
     	System.out.println("セッションオブジェクト（cart）の中身を全て出力");
+
+    	size = cart.size();
+    	itemBuys = new ItemBean[size];
+    	int index = 0;
 
 		for (Object key : cart.keySet()) {
 			System.out.println(key + " => " + cart.get(key));
@@ -93,7 +99,18 @@ public class BuyItemServlet extends HttpServlet {
 		    	System.out.println("注文処理失敗（在庫不足）");
 				counter++;
 		    }
+
+		    itemBuys[index] = itemBuy;
+		    index++;
 		}
+
+
+for (int i=0; i<itemBuys.length; i++) {
+	System.out.println(i + "= " + itemBuys[i]);
+}
+
+
+
 
 		if (counter > 0) {
 			System.out.println("①在庫数チェック：NG！");
@@ -103,15 +120,21 @@ public class BuyItemServlet extends HttpServlet {
 
 		} else {
 			System.out.println("①在庫数チェック：OK！");
+
 			System.out.println("在庫あり。注文処理へ");
-			BuyItemLogic buyItemLogic = new BuyItemLogic();
-			isReslut = buyItemLogic.execute(itemBuy);
-			if (isReslut) {
-				System.out.println("②注文履歴テーブルに反映完了");
-				orderResult = 0;
-			} else {
-				System.out.println("②注文履歴テーブル反映しない");
-				orderResult = 9;
+
+
+			for (int i=0; i<itemBuys.length; i++) {
+				itemBuy = itemBuys[i];
+
+				BuyItemLogic buyItemLogic = new BuyItemLogic();
+				isReslut = buyItemLogic.execute(itemBuy);
+				if (isReslut) {
+					orderResult = 0;
+				} else {
+					orderResult = 9;
+				}
+
 			}
 		}
 

@@ -33,7 +33,7 @@ public class CartServlet extends HttpServlet {
 		UserBean loginUser = (UserBean) session.getAttribute("loginUser");
 		String userName = loginUser.getUserName(); // ユーザー名をカートのセッション名として使用
 
-		// LinkedHashMapは挿入された順番を保持する
+		// LinkedHashMapは挿入された順番を保持する → 逆順にしたい
 		Map<String, List<Object>> cart = new LinkedHashMap<String, List<Object>>();
 
 		// ■「削除」ボタンが押された場合

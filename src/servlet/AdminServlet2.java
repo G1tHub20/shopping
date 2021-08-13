@@ -73,7 +73,7 @@ public class AdminServlet2 extends HttpServlet {
         request.setAttribute("adminMsg", String.valueOf(item_id2) + "を更新しました。");
       } else if (isSuccess == 1) {
         System.out.println("処理しっぱい");
-        request.setAttribute("adminMsg", String.valueOf("更新できません。" + item_id2 + "の商品情報を変更してから実行してください。"));
+        request.setAttribute("adminMsg", String.valueOf(item_id2 + "を更新できません。商品情報を変更してから実行してください。"));
       } else {
         System.out.println("処理しっぱい");
         request.setAttribute("adminMsg", "申し訳ありません。更新できませんでした。");
