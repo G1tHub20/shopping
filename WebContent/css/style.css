@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+h1 {
+	background-color: #000;
+	color: #fff;
+	margin-top: 10px;
+}
+
+#header {
+	margin: 0;
+}
+
+form#adminForm input {
+	width: 100px;
+}
+
+form#adminForm input[type="number"] {
+	width: 50px;
+}
+
+#listtable thead {
+	display: block;
+}
+#listtable tbody {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 485px;
+	width: 600px;
+}
+
+#admintable thead {
+	display: block;
+}
+#admintable tbody {
+	display: block;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 375px;
+	width: 600px;
+}
+
+thead th {
+	text-align: left;
+}
+
+
+thead th:nth-of-type(1) {
+	width: 163px;
+}
+thead th:nth-of-type(2) {
+	width: 72px;
+}
+thead th:nth-of-type(3) {
+	width: 36px;
+}
+thead th:nth-of-type(4) {
+	width: 163px;
+}
+
+
+#adminthead th:nth-of-type(1) {
+	width: 80px;
+}
+#adminthead th:nth-of-type(2) {
+	width: 150px;
+}
+#adminthead th:nth-of-type(3) {
+	width: 60px;
+}
+#adminthead th:nth-of-type(4) {
+	width: 50px;
+}
+#adminthead th:nth-of-type(5) {
+	width: 100px;
+}
+
+td#stock {
+	width: 36px;
+}
+
+
+/*
+ノートPC
+@media screen and (max-width: 1920px) {
+
+	#listtable tbody {
+		height: 600px;
+	}
+	#admintable tbody {
+		height: 500px;
+	}
+}
+*/
