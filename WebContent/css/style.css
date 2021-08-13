@@ -3,7 +3,6 @@
 h1 {
 	background-color: #000;
 	color: #fff;
-<<<<<<< HEAD
 	margin-top: 10px;
 }
 
@@ -93,15 +92,3 @@ td#stock {
 	}
 }
 */
-=======
-}
-
-
-form#adminForm input {
-	width: 100px;
-}
-
-form#adminForm input[type="number"] {
-	width: 50px;
-}
->>>>>>> branch 'master' of https://github.com/G1tHub20/shopping.git
