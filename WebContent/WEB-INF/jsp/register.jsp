@@ -15,9 +15,9 @@
 <h1>アカウント登録</h1>
 </body>
 <form action="/shopping/RegisterServlet" method="post">
-ユーザー名：<input type="text" name="userName" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" minlength="8" maxlength="20" autofocus required><br>
-パスワード：<input type="password" name="pass" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字8～20字（いずれかを1字以上含む）で入力して下さい。" minlength="8" maxlength="20" required><br>
-※半角英数字8～20字（いずれかを1字以上含む）で入力してください<br>
+ユーザー名：<input type="text" name="userName" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字の組み合わせ・記号不可" minlength="8" maxlength="20" autofocus required><br>
+パスワード：<input type="password" name="pass" pattern="(?=.*[a-zA-Z])(?=.*[0-9])([a-zA-Z0-9]{6,20})$" title="半角英数字の組み合わせ・記号不可" minlength="8" maxlength="20" required><br>
+※半角英数字の組み合わせで、8～20字で入力して下さい。<br>
 <button type="submit">アカウント登録</button>
 </form>
 <p>${registerMsg}</p>
