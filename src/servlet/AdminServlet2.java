@@ -89,7 +89,7 @@ public class AdminServlet2 extends HttpServlet {
         request.setAttribute("adminMsg", "処理しっぱい");
       } else {
         System.out.println("処理成功");
-        request.setAttribute("adminMsg", String.valueOf(item_id2) + "を削除しました");
+        request.setAttribute("adminMsg", String.valueOf(item_id2) + "を削除しました。");
       }
     }
     GetItemListLogic getItemListLogic = new GetItemListLogic();
