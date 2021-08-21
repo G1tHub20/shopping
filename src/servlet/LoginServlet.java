@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
 	      HttpSession session = request.getSession();
 	      session.setAttribute("loginUser", loginUser);
 	      RequestDispatcher dispatcher = request.getRequestDispatcher("/ShoppingServlet");
-	      System.out.println("セッションにloginUser情報を保存："+ loginUser.getUserName());
+	      System.out.println("セッションにloginUserを保存："+ loginUser.getUserName());
 	      dispatcher.forward((ServletRequest)request, (ServletResponse)response);
     }
   }
