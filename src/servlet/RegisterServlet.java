@@ -45,7 +45,7 @@ public class RegisterServlet extends HttpServlet {
      session.setAttribute("loginUser", user); // ユーザー名のみ保持
     } else {
       System.out.println("別のユーザー名を入力してください");
-      request.setAttribute("registerMsg", "登録できません。別のユーザー名を入力してください");
+      request.setAttribute("registerMsg", "登録できません。別のユーザー名を入力してください。");
     }
     System.out.println("▼▼「アカウント登録」ページ");
     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/register.jsp");
