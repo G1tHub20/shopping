@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
 	      session.removeAttribute("historyList");
 	      session.removeAttribute("loginUser");
 	      System.out.println("ログアウト");
-	      System.out.println("セッション（itemlist・itemSearch・historyList・loginUser）を削除。カートセッションのみ残す");
+	      System.out.println("セッション（itemlist・itemSearch・historyList・loginUser）を削除。cartセッションのみ残す");
 	      session = request.getSession(false);
 	      if (session == null) {
 	        System.out.println("セッションがNULL");
