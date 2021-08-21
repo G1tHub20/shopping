@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 	      if (session == null) {
 	        System.out.println("セッションがNULL");
 	      } else {
-	        System.out.println("セッションがある");
+	        System.out.println("セッションあり");
 	      }
 	      System.out.println("▼▼「ログイン」ページ");
 	      response.sendRedirect("./");
