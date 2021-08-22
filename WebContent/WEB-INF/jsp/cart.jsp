@@ -62,7 +62,7 @@ Map<String, List<Object>> cart = (Map<String, List<Object>>) session.getAttribut
 <c:if test="${not empty cartMsg}">
 	<p>${cartMsg}</p>
 </c:if>
-
+<br>
 <a href="ShoppingServlet?action=itemList">商品リストに戻る</a>
 
 <script src="js/nav.js"></script>

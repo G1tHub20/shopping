@@ -34,8 +34,10 @@ String placeholder2 = "白ネクタイ";
 String confirmButton = "商品を新規追加します。よろしいですか？";
 String str = "追加する";
 String backButton = "";
+String aboutCode = "<span class='small'>※商品コードは、英字3桁+数字4桁の組み合わせで入力</span>";
+String aboutFile = "<span class='small'>※画像ファイルは、jpg形式で400×400(px)推奨</span>";
 
-String picUp = "<input type='file' name='image' id='image' accept='.jpg' required><br>※推奨：400×400px・jpg形式";
+String picUp = aboutCode + "<br><input type='file' name='image' id='image' accept='.jpg' required><br>" + aboutFile;
 
 
 //■変更用フォームに切替

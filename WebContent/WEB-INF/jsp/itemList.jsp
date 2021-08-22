@@ -16,7 +16,7 @@
 <form action="/shopping/ShoppingServlet?action=search" method="post">
 <select name="category">
 	<option value="">全て</option>
-	<option value="wat">時計</option>
+	<option value="wat">腕時計</option>
 	<option value="tie">ネクタイ</option>
 	<option value="wal">財布</option>
 </select>

@@ -136,7 +136,8 @@ public class CartServlet extends HttpServlet {
 		}
 
 		// cartをセッションに保存
-		System.out.println("cartをセッション（" + userName + "）に保存");
+		System.out.println("cartをセッションID（" + userName + "）に保存");
+		System.out.println(cart);
 		session.setAttribute(userName, cart); //個別にカートを持たせるため、ユーザー名をセッション名に使用
 
 		// 合計金額totalをセッションパラメータに保存

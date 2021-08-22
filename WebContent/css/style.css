@@ -4,6 +4,7 @@ h1 {
 	background-color: #000;
 	color: #fff;
 	margin-top: 10px;
+	text-indent: 0.3em;
 }
 
 #header {
@@ -79,6 +80,9 @@ td#stock {
 	width: 36px;
 }
 
+.small {
+	font-size: 14px;
+}
 
 /*
 ノートPC
