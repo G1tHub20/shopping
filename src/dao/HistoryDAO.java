@@ -17,7 +17,7 @@ public class HistoryDAO {
   private final String DB_USER = "root";
   private final String DB_PASS = "mysqlpa55";
 
-  //◆ユーザーごとにレコードを取得するメソッド
+  //◆レコードを取得するメソッド
   public List<HistoryBean> getHistory(UserBean loginUser) {
     System.out.println("...................HistoryDAO(getHistory)...................");
     UserBean user = loginUser;
