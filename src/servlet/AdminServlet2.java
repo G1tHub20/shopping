@@ -41,25 +41,25 @@ public class AdminServlet2 extends HttpServlet {
       System.out.println("「追加」フォームの処理");
       Part part = request.getPart("image");
       String filename = Paths.get(part.getSubmittedFileName(), new String[0]).getFileName().toString();
-      String[] image = filename.split("\\.");
+//      String[] image = filename.split("\\.");
+      String image = filename;
       System.out.println("filename= " + filename);
-      System.out.println("image= " + image[0]);
       String path = getServletContext().getRealPath("/upload");
       System.out.println("実際にファイルが保存されるパス");
       System.out.println(path);
       part.write(String.valueOf(path) + File.separator + filename);
       request.setAttribute("filename", filename);
-      ItemBean newItem = new ItemBean(item_id, item_name, price, quantity, image[0]);
+      ItemBean newItem = new ItemBean(item_id, item_name, price, quantity, image);
       AdminLogic adminLogic = new AdminLogic();
       boolean isSuccess = adminLogic.execute1(newItem);
       request.setAttribute("name", "new");
       request.setAttribute("itemChange", newItem);
       if (!isSuccess) {
         System.out.println("処理しっぱい");
-        request.setAttribute("adminMsg", String.valueOf(item_id2) + "を追加できませんでした。同じ商品コードが既に存在します。");
+        request.setAttribute("adminMsg", String.valueOf(item_id) + "を追加できませんでした。同じ商品コードが既に存在します。");
       } else {
         System.out.println("処理成功");
-        request.setAttribute("adminMsg", String.valueOf(item_id2) + "を追加しました");
+        request.setAttribute("adminMsg", String.valueOf(item_id) + "を追加しました。");
       }
     } else if (action != null && action.equals("update")) {
       System.out.println("「更新」フォームの処理");

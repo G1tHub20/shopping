@@ -109,9 +109,6 @@ for (int i=0; i<itemBuys.length; i++) {
 	System.out.println(i + "= " + itemBuys[i]);
 }
 
-
-
-
 		if (counter > 0) {
 			System.out.println("①在庫数チェック：NG！");
 			System.out.println("在庫なし。注文処理しっぱい");

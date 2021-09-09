@@ -37,7 +37,7 @@ String backButton = "";
 String aboutCode = "<span class='small'>※商品コードは、英字3桁+数字4桁の組み合わせで入力</span>";
 String aboutFile = "<span class='small'>※画像ファイルは、jpg形式で400×400(px)推奨</span>";
 
-String picUp = aboutCode + "<br><input type='file' name='image' id='image' accept='.jpg' required><br>" + aboutFile;
+String picUp = aboutCode + "<br><input type='file' name='image' id='image' accept='.jpg, .png, .gif' required><br>" + aboutFile;
 
 
 //■変更用フォームに切替
@@ -78,8 +78,8 @@ if (name != null && !(name.equals("new"))) {
     <table>
         <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
         <tr>
-        <td><input type="text" pattern="^([a-z]{3})([0-9]{4})$" title="英字3桁+数字4桁 ※半角、小文字のみ" name="item_id" value="<%= item_id %>" placeholder="<%= placeholder1 %>" <%= disabled1 %> required></td>
-        <td><input type="text" name="item_name" value="<%= item_name %>" placeholder="<%= placeholder2 %>" <%= disabled1 %> required></td>
+        <td><input type="text" pattern="^([a-z]{3})([0-9]{4})$" title="英字3文字+数字4文字 ※半角、小文字のみ" name="item_id" value="<%= item_id %>" placeholder="<%= placeholder1 %>" <%= disabled1 %> required></td>
+        <td><input type="text" pattern=".{3,20}" title="3文字以上20文字以内" name="item_name" value="<%= item_name %>" placeholder="<%= placeholder2 %>" <%= disabled1 %> required></td>
         <td><span>¥</span><input type="number" name="price" min="100" max="50000" step="100" value="<%= price %>" <%= disabled2 %> required></td>
         <td><input type="number" name="quantity" min="0" max="50" value="<%= quantity %>" <%= disabled2 %> required></td>
 		<td>
@@ -125,7 +125,7 @@ if (name != null && !(name.equals("new"))) {
 		    <button type="submit" name="UPDorDEL" value="delete">削除</button></td>
         </form>
     </tr>
-    <tr><td colspan="3"><img src="/shopping/upload/${item.image}.jpg" width="200" height="200"></td></tr>
+    <tr><td colspan="3"><img src="/shopping/upload/${item.image}" width="200" height="200"></td></tr>
 
     <tr><td>&nbsp;</td></tr>
     <tr><td colspan="5"><hr></td></tr>
@@ -138,7 +138,7 @@ if (name != null && !(name.equals("new"))) {
 
 <script>
 window.addEventListener('DOMContentLoaded', function() {
-// 指定されると動くメッソド
+// 指定されると動くメソッド
 document.querySelector("#image").addEventListener('change', function(e) {
 // ブラウザーがFile APIを利用できるか確認
 if (window.File) {

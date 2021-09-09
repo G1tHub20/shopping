@@ -62,7 +62,7 @@ public class HistoryDAO {
 
 			if (!purchaseDate0.equals(savePurchaseDate) && (counter == 0) ) {
 				savePurchaseDate = rs.getString("purchase_date");
-				purchaseDate = purchaseDate0.substring(0, 10);
+				purchaseDate = purchaseDate0.substring(0, 16);
 			} else {
 				purchaseDate = "&nbsp;";
 			}

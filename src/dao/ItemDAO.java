@@ -278,6 +278,7 @@ public class ItemDAO {
 		System.out.println("...................ItemDAO(newItemInfo)...................");
 
 		String item_id = itemNew.getItem_id();
+//		String category_item = itemNew.getItem_id();
 		String name = itemNew.getName();
 		int price = itemNew.getPrice();
 		int quantity = itemNew.getQuantity();
@@ -301,6 +302,13 @@ public class ItemDAO {
 				System.out.println("同じ商品コードが既に存在します。登録処理できません…");
 				return false;
 			}
+
+			//↓ 採番された書品コードを使用
+			String cat = "wal";
+			String sql2 = "SELECT count_num FROM category_item WHERE category = ?";
+
+
+			//↑
 
 			System.out.println("新規商品です。登録処理を行います！");
 
