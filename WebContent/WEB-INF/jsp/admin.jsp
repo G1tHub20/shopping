@@ -15,13 +15,13 @@
 <h1>管理者画面</h1>
 
 <h2>商品の追加／更新／削除</h2>
-<%-- <p id="name"></p> --%>
-
 
 <%
 // ■デフォルトは新規追加用フォーム
 String name = (String) request.getAttribute("name");
 
+String input1Header = "商品カテゴリ";
+String input1 = "<select name='item_id' required><option value=''>カテゴリを選択</option><option value='tie'>ネクタイ</option><option value='wal'>財布</option><option value='wat'>腕時計</option></select>";
 String item_id = "";
 String item_name = "";
 int price = 0;
@@ -34,23 +34,26 @@ String placeholder2 = "白ネクタイ";
 String confirmButton = "商品を新規追加します。よろしいですか？";
 String str = "追加する";
 String backButton = "";
-String aboutCode = "<span class='small'>※商品コードは、英字3桁+数字4桁の組み合わせで入力</span>";
-String aboutFile = "<span class='small'>※画像ファイルは、jpg形式で400×400(px)推奨</span>";
+String aboutCode = "<span class='small'></span>";
+String aboutFile = "<span class='small'>※画像サイズは：400×400(px)推奨</span>";
 
 String picUp = aboutCode + "<br><input type='file' name='image' id='image' accept='.jpg, .png, .gif' required><br>" + aboutFile;
+
 
 
 //■変更用フォームに切替
 if (name != null && !(name.equals("new"))) {
 	ItemBean item = (ItemBean) request.getAttribute("itemChange");
 
+	input1Header = "商品コード";
     item_id = item.getItem_id();
+	input1 = "<input type='text' name='item_id' value='" + item_id + "' disabled required>";
+
     item_name = item.getName();
     price = item.getPrice();
     quantity = item.getQuantity();
 
     if (name.equals("update")) {
-
 	    // 要修正
 	    action = "update";
 	    disabled1 = "disabled";
@@ -74,11 +77,12 @@ if (name != null && !(name.equals("new"))) {
     String filename = (String) request.getAttribute("filename");
 %>
 
+
 <form action="/shopping/AdminServlet2?action=<%= action %>" enctype="multipart/form-data" method="post">
     <table>
-        <tr><th>商品コード</th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
+        <tr><th><%= input1Header %></th><th>商品名</th><th>価格</th><th>在庫数</th><th>ボタン</th></tr>
         <tr>
-        <td><input type="text" pattern="^([a-z]{3})([0-9]{4})$" title="英字3文字+数字4文字 ※半角、小文字のみ" name="item_id" value="<%= item_id %>" placeholder="<%= placeholder1 %>" <%= disabled1 %> required></td>
+        <td><%= input1 %></td>
         <td><input type="text" pattern=".{3,20}" title="3文字以上20文字以内" name="item_name" value="<%= item_name %>" placeholder="<%= placeholder2 %>" <%= disabled1 %> required></td>
         <td><span>¥</span><input type="number" name="price" min="100" max="50000" step="100" value="<%= price %>" <%= disabled2 %> required></td>
         <td><input type="number" name="quantity" min="0" max="50" value="<%= quantity %>" <%= disabled2 %> required></td>

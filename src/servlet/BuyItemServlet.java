@@ -135,10 +135,6 @@ for (int i=0; i<itemBuys.length; i++) {
 			}
 		}
 
-//		    System.out.println("注文処理失敗（在庫不足）判定後、処理は継続している？");
-
-
-
 			    if (orderResult == 0) {
 				    System.out.println("注文処理成功！");
 			    	System.out.println("セッションオブジェクト（cart）の削除");

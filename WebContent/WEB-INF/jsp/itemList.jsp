@@ -30,7 +30,7 @@
 <thead>
     <tr><th>商品名</th><th>価格</th><th>数量</th><th>ボタン</th></tr>
 </thead>
-<tbody class>
+<tbody>
 <c:forEach var="item" items="${itemList}" >
     <tr>
         <form action="/shopping/CartServlet" method="post">
@@ -57,12 +57,20 @@
         </c:choose>
         </form>
     </tr>
-    <tr><td colspan="3"><img src="/shopping/upload/${item.image}.jpg" width="200" height="200"></td></tr>
+    <tr><td colspan="3"><img src="/shopping/upload/${item.image}" width="200" height="200"></td></tr>
     <tr><td>&nbsp;</td></tr>
     <tr><td colspan="5"><hr></td></tr>
 </c:forEach>
 </tbody>
 </table>
+
+<script>
+
+
+
+
+</script>
+
 
 </body>
 </html>

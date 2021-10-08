@@ -30,15 +30,17 @@ public class AdminServlet2 extends HttpServlet {
     System.out.println("--------------------AdminServlet2(POST)--------------------");
     request.setCharacterEncoding("UTF-8");
     String action = request.getParameter("action");
-    String item_id = request.getParameter("item_id");
+    String item_id0 = request.getParameter("item_id");
     String item_id2 = request.getParameter("item_id2");
     String item_name = request.getParameter("item_name");
     String item_name2 = request.getParameter("item_name2");
     int price = Integer.parseInt(request.getParameter("price"));
     int quantity = Integer.parseInt(request.getParameter("quantity"));
+
     System.out.println("★action= " + action);
     if (action != null && action.equals("new")) {
       System.out.println("「追加」フォームの処理");
+
       Part part = request.getPart("image");
       String filename = Paths.get(part.getSubmittedFileName(), new String[0]).getFileName().toString();
 //      String[] image = filename.split("\\.");
@@ -49,14 +51,19 @@ public class AdminServlet2 extends HttpServlet {
       System.out.println(path);
       part.write(String.valueOf(path) + File.separator + filename);
       request.setAttribute("filename", filename);
-      ItemBean newItem = new ItemBean(item_id, item_name, price, quantity, image);
+
+      ItemBean newItem = new ItemBean(item_id0, item_name, price, quantity, image);
       AdminLogic adminLogic = new AdminLogic();
-      boolean isSuccess = adminLogic.execute1(newItem);
+      String item_id = adminLogic.execute1(newItem);
+
+
+
       request.setAttribute("name", "new");
       request.setAttribute("itemChange", newItem);
-      if (!isSuccess) {
+      if (item_id == null) {
         System.out.println("処理しっぱい");
-        request.setAttribute("adminMsg", String.valueOf(item_id) + "を追加できませんでした。同じ商品コードが既に存在します。");
+//        request.setAttribute("adminMsg", String.valueOf(item_id) + "を追加できませんでした。同じ商品コードが既に存在します。");
+        request.setAttribute("adminMsg", "追加処理に失敗しました。");
       } else {
         System.out.println("処理成功");
         request.setAttribute("adminMsg", String.valueOf(item_id) + "を追加しました。");

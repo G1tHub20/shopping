@@ -1,7 +1,9 @@
 package model;
 
-import dao.ItemDAO;
 import java.util.List;
+
+import dao.Category_itemDAO;
+import dao.ItemDAO;
 
 public class GetItemListLogic {
   public List<ItemBean> execute() {
@@ -11,4 +13,12 @@ public class GetItemListLogic {
     System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''");
     return itemList;
   }
+
+  public List<CategoryItemBean> execute2() {
+	    System.out.println("\r''''''''''''''''''''GetItemListLogic''''''''''''''''''''");
+	    Category_itemDAO dao = new Category_itemDAO();
+	    List<CategoryItemBean> categoryList = dao.getCategoryInfo();
+	    System.out.println("''''''''''''''''''''''''''''''''''''''''''''''''''");
+	    return categoryList;
+	}
 }

@@ -274,7 +274,7 @@ public class ItemDAO {
 		}
 
 	// ◆新商品を追加するメソッド
-	public boolean newItemInfo(ItemBean itemNew) {
+	public String newItemInfo(ItemBean itemNew) {
 		System.out.println("...................ItemDAO(newItemInfo)...................");
 
 		String item_id = itemNew.getItem_id();
@@ -283,39 +283,39 @@ public class ItemDAO {
 		int price = itemNew.getPrice();
 		int quantity = itemNew.getQuantity();
 		String image = itemNew.getImage();
+		String category = null;
+
 
 		// DB接続
 		try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
-			String sql0 = "SELECT EXISTS(SELECT * FROM item WHERE id = ?) AS item_check";
-			PreparedStatement pStmt0 = conn.prepareStatement(sql0);
-			pStmt0.setString(1, item_id);
-			ResultSet rs = pStmt0.executeQuery();
-
-			String item_check = "0";
-			if(rs.next()){
-				item_check = rs.getString("item_check");
+			if (item_id.length() == 3) { // カテゴリー名なら商品コード化
+				category = item_id;
+				System.out.println("カテゴリー名なら商品コード化");
+				// ■Category_itemテーブルの呼び出し
+				Category_itemDAO dao = new Category_itemDAO();
+			    item_id = dao.getNewId(category);
 			}
 
-			// 実行前のレコードチェック
-			if (item_check.equals("1")) {
-				System.out.println("同じ商品コードが既に存在します。登録処理できません…");
-				return false;
-			}
-
-			//↓ 採番された書品コードを使用
-			String cat = "wal";
-			String sql2 = "SELECT count_num FROM category_item WHERE category = ?";
-
-
-			//↑
-
-			System.out.println("新規商品です。登録処理を行います！");
-
+			// ↓↓商品コード重複は発生しないので不要？
+//			String sql0 = "SELECT EXISTS(SELECT * FROM item WHERE id = ?) AS item_check";
+//			PreparedStatement pStmt0 = conn.prepareStatement(sql0);
+//			pStmt0.setString(1, item_id);
+//			ResultSet rs = pStmt0.executeQuery();
+//			String item_check = "0";
+//			if(rs.next()){
+//				item_check = rs.getString("item_check");
+//			}
+//			// 実行前のレコードチェック
+//			if (item_check.equals("1")) {
+//				System.out.println("同じ商品コードが既に存在します。登録処理できません…");
+//				return null;
+//			}
+//			System.out.println("新規商品です。登録処理を行います！");
+			// ↑↑
 
 			String sql = "INSERT INTO item(id, name, price, quantity, image) VALUES(?, ?, ?, ?, ?)";
 			PreparedStatement pStmt = conn.prepareStatement(sql);
-
 			pStmt.setString(1, item_id);
 			pStmt.setString(2, name);
 			pStmt.setInt(3, price);
@@ -327,7 +327,20 @@ public class ItemDAO {
 
 			// 変更しっぱい…
 			if (result != 1) {
-				return false;
+				return null;
+			}
+
+			// ■Category_itemテーブルの呼び出し
+			Category_itemDAO dao = new Category_itemDAO();
+		    item_id = dao.getNewId(category);
+			String sql2 = "UPDATE category_item SET count_num = count_num + 1 WHERE category = ?";
+			PreparedStatement pStmt2 = conn.prepareStatement(sql2);
+			pStmt2.setString(1, category);
+			int result2 = pStmt2.executeUpdate(); //resultには追加された行数(「1」になるはず)が入る
+			if (result2 == 1) {
+				System.out.println("商品コードの更新ok");
+			} else {
+				System.out.println("商品コードの更新しっぱい");
 			}
 
 			System.out.println(item_id + "新商品を追加した！");
@@ -336,7 +349,7 @@ public class ItemDAO {
 			e.printStackTrace();
 			System.out.println("DB接続しっぱい");
 		}
-		return true;
+		return item_id;
 	}
 
 

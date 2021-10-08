@@ -3,15 +3,13 @@ package model;
 import dao.ItemDAO;
 
 public class AdminLogic {
-  public boolean execute1(ItemBean newItem) {
+  public String execute1(ItemBean newItem) {
     System.out.println("\r''''''''''''''''''''AdminLogic''''''''''''''''''''");
     // DAOクラスをインスタンス化
     ItemDAO dao = new ItemDAO();
     // ■itemテーブルに商品の注文を反映
-    boolean isNew = dao.newItemInfo(newItem);
-    if (!isNew)
-      return false;
-    return true;
+    String item_id = dao.newItemInfo(newItem);
+    return item_id;
   }
 
   public int execute2(ItemBean changeItem) {

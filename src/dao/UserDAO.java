@@ -53,6 +53,7 @@ public class UserDAO {
   public boolean registerUser(UserBean inputUser) {
     System.out.println("...................UserDAO(registerUser)...................");
     UserBean user = inputUser;
+
     // DB接続
     try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
 
