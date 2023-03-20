@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+h1 {
+	/* background-color: #111; */
+	background-color: navy;
+	color: #fff;
+	margin-top: 0;
+	text-indent: 0.3em;
+}
+
+header {
+	/*
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: #fff;
+	border-bottom: solid 1px #7a7a7a;
+	z-index: 99999;
+	*/
+}

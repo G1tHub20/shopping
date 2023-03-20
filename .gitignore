@@ -1,0 +1,8 @@
+# どのディレクトリかを問わず、file.phpを除外
+# file-a.php
+DBconnect.java
+test/
+
+# .gitignore が置かれたディレクトリ内のfile.phpを除外
+# /file-a.php
+/bin/
