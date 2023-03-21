@@ -25,11 +25,6 @@ public class HistoryDAO {
     				+ "ON history.item_id = item.id "
     				+ "WHERE user_id=? ORDER BY id DESC";
 
-//    		System.out.println("SELECT history.id, item_id, item_price, order_num, order_date, name AS item_name, item_price * order_num AS 'sum_price' "
-//    				+ "FROM history LEFT JOIN item "
-//    				+ "ON history.item_id = item.id "
-//    				+ "WHERE user_id=" + user_id + " ORDER BY id DESC");
-
             PreparedStatement pStmt = con.prepareStatement(sql);
             pStmt.setInt(1, user_id);
 
