@@ -25,11 +25,11 @@ public class HistoryDAO {
     				+ "ON history.item_id = item.id "
     				+ "WHERE user_id=? ORDER BY id DESC";
 
-            PreparedStatement pStmt = con.prepareStatement(sql);
-            pStmt.setInt(1, user_id);
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, user_id);
 
     		// SQL文を実行
-    		ResultSet rs = pStmt.executeQuery();
+    		ResultSet rs = pstmt.executeQuery();
 
     		// 退避エリア
     		String save_order_date = null;

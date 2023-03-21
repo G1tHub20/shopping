@@ -16,13 +16,13 @@ public class UserDAO {
 
 	    try (Connection con = DBconnect.getConnection() ) {
         	String sql = "SELECT id, userName, pass FROM user WHERE userName = ?  AND pass = ?";
-            PreparedStatement pStmt = con.prepareStatement(sql);
-            pStmt.setString(1, user.getUserName());
-            pStmt.setString(2, user.getPass());
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, user.getUserName());
+            pstmt.setString(2, user.getPass());
 //            System.out.println("SELECT id, userName, pass FROM user WHERE userName = \"" + user.getUserName() + "\" AND pass = \"" + user.getPass() + "\"");
 
     		// SQL文を実行
-    		ResultSet rs = pStmt.executeQuery();
+    		ResultSet rs = pstmt.executeQuery();
 
     		// DBにユーザー情報がある場合
     		if (rs.next()) {
