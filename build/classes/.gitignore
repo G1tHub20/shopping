@@ -1,0 +1,2 @@
+# DB接続を担当するクラスを無視する
+DBconnect.java
